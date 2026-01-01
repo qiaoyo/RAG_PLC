@@ -1,0 +1,11 @@
+
+/books
+/code
+/data/data_full
+
+我正在构建一个用于PLC代码生成的RAG知识库。 我已有的材料包括books路径下的8本电子书籍和自己整理的plc代码库共677条。 代码库以json形式存储，样本在路径 /home/qiaoyo/python_proj/PLC_RAG/PLC_RAG/data/data_sample/train_001.json， 
+全部代码库在/home/qiaoyo/python_proj/PLC_RAG/PLC_RAG/data/data_full/train_full.json，完整代码库和样本的格式完全一致。你可以只阅读样本文件。
+
+我有的硬件包括一台高性能128g内存，48g显卡的台式机，软件环境尚未部署，系统为Ubuntu22。
+
+请你根据我的软硬件， 数据， 简要列出我应该配置的软件环境，并根据适合的软件框架，搭建我可以本地运行训练和推理的RAG项目。我希望可以对llm进行微调，嵌入模型和周边小模型进行训练。你生成的代码都存储在src路径下。

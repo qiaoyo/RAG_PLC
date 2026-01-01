@@ -1,0 +1,879 @@
+[
+  {
+    "instruction": "用st语言实现一个JK触发器",
+    "input": "",
+    "output": "FUNCTION_BLOCK FF_JKE\nVAR_INPUT\nSET :BOOL;\nJ :BOOL;\nCLK :BOOL;\nK :BOOL;\nRST :BOOL;\nEND_VAR\n\nVAR_OUTPUT\nQ :BOOL;\nEND_VAR\n\nVAR\nedge :BOOL;\nEND_VAR\n\nIF rst OR set THEN\nQ := NOT rst;\nELSIF clk AND NOT edge THEN\nIF J XOR K THEN Q := J;\nELSE Q := K XOR Q;\nEND_IF;\nEND_IF;\nedge := CLK;\nEND_FUNCTION_BLOCK",
+    "description": "JK触发器功能块实现，支持同步置位/复位功能。当RST为高电平时异步复位，SET为高电平时异步置位。在时钟上升沿根据J、K输入决定输出状态：J≠K时Q=J；J=K=1时Q翻转；J=K=0时保持。广泛应用于时序逻辑电路、状态机设计、计数器等工业控制场景。",
+    "inputs": [
+      {"name": "SET", "type": "BOOL", "description": "异步置位信号，高电平有效"},
+      {"name": "J", "type": "BOOL", "description": "JK触发器J输入端"},
+      {"name": "CLK", "type": "BOOL", "description": "时钟输入信号，上升沿触发"},
+      {"name": "K", "type": "BOOL", "description": "JK触发器K输入端"},
+      {"name": "RST", "type": "BOOL", "description": "异步复位信号，高电平有效"}
+    ],
+    "outputs": [
+      {"name": "Q", "type": "BOOL", "description": "触发器输出信号"}
+    ],
+    "library_dependency": "无特殊库依赖，使用标准IEC 61131-3功能",
+    "iec_standard": "IEC 61131-3 基本功能块，符合数字逻辑设计标准",
+    "tags": ["触发器", "时序逻辑", "数字电路", "状态机", "工业控制", "PLC编程"]
+  },
+  {
+    "instruction": "用ST语言实现一个上升沿触发的RS触发器",
+    "input": "",
+    "output": "VAR_INPUT\n\tCS : BOOL;\n\tCR : BOOL;\n\tRST : BOOL;\nEND_VAR\n\nVAR_OUTPUT\n\tQ : BOOL;\nEND_VAR\n\nVAR\n\tes : BOOL;\n\ter : BOOL;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FF_RSE\nIEC_LANGUAGE: ST\n*)\nIF rst THEN\n\t(* asynchronous reset *)\n\tQ := FALSE;\nELSIF CR AND NOT er THEN\n\t(* rising edge on CR *)\n\tQ := FALSE;\nELSIF CS AND NOT es THEN\n\t(* rising edge on CS *)\n\tQ := TRUE;\nEND_IF;\n\nes := CS;\n\ter := CR;",
+    "description": "上升沿触发的RS触发器实现，支持异步复位功能。检测CS（置位）和CR（复位）输入的上升沿来触发状态变化，RST信号提供异步复位功能。适用于按钮去抖、状态锁存、边沿检测等应用场景。",
+    "inputs": [
+      {"name": "CS", "type": "BOOL", "description": "置位输入，上升沿触发置位"},
+      {"name": "CR", "type": "BOOL", "description": "复位输入，上升沿触发复位"},
+      {"name": "RST", "type": "BOOL", "description": "异步复位信号，高电平有效"}
+    ],
+    "outputs": [
+      {"name": "Q", "type": "BOOL", "description": "触发器输出状态"}
+    ],
+    "library_dependency": "无特殊库依赖，使用标准IEC 61131-3功能",
+    "iec_standard": "IEC 61131-3 基本功能块，上升沿检测逻辑",
+    "tags": ["RS触发器", "上升沿检测", "状态锁存", "去抖动", "边沿触发", "数字逻辑"]
+  },
+  {
+    "instruction": "用st语言计算斐波那契数列",
+    "input": "",
+    "output": "VAR_INPUT\n\tX : INT;\nEND_VAR\n\nVAR\n\tt1 : DINT;\n\tt2 : DINT;\n\tX_tmp : INT;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FIB\nIEC_LANGUAGE: ST\n*)\nt1 := DINT#0;\nt2 := DINT#0;\nX_tmp := X;\nIF X_tmp < 0 OR X_tmp > 46 THEN\n\tFIB := DINT#-1;\nELSIF X_tmp < 2 THEN\n\tFIB := INT_TO_DINT(X_tmp);\n\tRETURN;\nELSE\n\t(* the fibonacci number is the sum of the two suceeding fibonaci numbers *)\n\t(* we store the numbers alternatively in t1 and t2 depending on pt *)\n\tt2 := DINT#1;\n\tWHILE X_tmp > 3 DO\n\t\tX_tmp := X_tmp - 2;\n\t\tt1 := t1 + t2;\n\t\tt2 := t1 + t2;\n\tEND_WHILE;\n\tIF X_tmp > 2 THEN t1 := t1 + t2; END_IF;\n\tfib := t1 + t2;\nEND_IF;\n\n(* alternative code for very big numbers\n\nIF X < 31 THEN\n\tfib := 0.4472136 * (expn(1.618034,X) - expn(-0.618034,X));\nElse\n\tfib := 0.4472133 * expn(1.618034,X);\nEND_IF;",
+    "description": "斐波那契数列计算函数，采用迭代算法高效计算第n项斐波那契数。支持0-46范围内的输入，返回DINT类型的结果。斐波那契数列在自然界、金融分析、算法设计等领域有广泛应用。代码包含边界检查和大数计算的替代算法。",
+    "inputs": [
+      {"name": "X", "type": "INT", "description": "斐波那契数列项数索引(0-46)"}
+    ],
+    "outputs": [
+      {"name": "FIB", "type": "DINT", "description": "第X项斐波那契数值"}
+    ],
+    "library_dependency": "无特殊库依赖，使用标准IEC 61131-3数学函数",
+    "iec_standard": "IEC 61131-3 数学函数，循环和条件语句应用",
+    "tags": ["斐波那契", "数学计算", "迭代算法", "数列", "算法设计", "数值分析"]
+  },
+  {
+    "instruction": "用st语言实现一个16Dword大小的先进先出内存功能块",
+    "input": "",
+    "output": "VAR_INPUT\n\tDIN : DWORD;\n\tE : BOOL := TRUE;\n\tRD : BOOL;\n\tWD : BOOL;\n\tRST : BOOL;\nEND_VAR\n\nVAR_OUTPUT\n\tDOUT : DWORD;\n\nEMPTY : BOOL := TRUE;\n\tFULL : BOOL;\nEND_VAR\n\nVAR\n\tfifo : oscat_ardw_0_15;\n\tpr : INT;\n\tpw : INT;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FIFO_16\nIEC_LANGUAGE: ST\n*)\nIF RST THEN\n\tpw := pr;\n\tFULL := FALSE;\n\tEMPTY := TRUE;\n\tDout := DWORD#0;\nELSIF E THEN\n\tIF NOT EMPTY AND RD THEN\n\t\tDout := fifo[pr];\n\t\tpr := INC1(pr,16);\n\t\tEMPTY := pr = pw;\n\t\tFULL := FALSE;\n\tEND_IF;\n\tIF NOT FULL AND WD THEN\n\t\tfifo[pw] := Din;\n\t\tpw := INC1(pw,16);\n\t\tFULL := pw = pr;\n\t\tEMPTY := FALSE;\n\tEND_IF;\nEND_IF;",
+    "description": "16位双字FIFO（先进先出）缓冲区实现，支持读写操作和状态指示。使用环形缓冲区算法管理16个DWORD数据，提供空/满状态指示。适用于数据缓存、通信缓冲、生产消费队列等工业应用场景。",
+    "inputs": [
+      {"name": "DIN", "type": "DWORD", "description": "写入数据输入"},
+      {"name": "E", "type": "BOOL", "description": "使能信号，控制FIFO操作"},
+      {"name": "RD", "type": "BOOL", "description": "读信号，高电平有效"},
+      {"name": "WD", "type": "BOOL", "description": "写信号，高电平有效"},
+      {"name": "RST", "type": "BOOL", "description": "复位信号，清空FIFO"}
+    ],
+    "outputs": [
+      {"name": "DOUT", "type": "DWORD", "description": "读出数据输出"},
+      {"name": "EMPTY", "type": "BOOL", "description": "FIFO空状态指示"},
+      {"name": "FULL", "type": "BOOL", "description": "FIFO满状态指示"}
+    ],
+    "library_dependency": "OSCAT库: oscat_ardw_0_15数组类型, INC1函数",
+    "iec_standard": "IEC 61131-3 数组操作，环形缓冲区管理",
+    "tags": ["FIFO", "缓冲区", "数据队列", "环形缓冲", "先进先出", "数据缓存"]
+  },
+  {
+    "instruction": "用st语言实现一个32Dword大小的先进先出内存功能块",
+    "input": "",
+    "output": "VAR_INPUT\n\tDIN : DWORD;\n\tE : BOOL := TRUE;\n\tRD : BOOL;\n\tWD : BOOL;\n\tRST : BOOL;\nEND_VAR\n\nVAR_OUTPUT\n\tDOUT : DWORD;\n\tEMPTY : BOOL := TRUE;\n\tFULL : BOOL;\nEND_VAR\n\nVAR\n\tfifo : oscat_ardw_0_31;\n\tpr : INT;\n\tpw : INT;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FIFO_32\nIEC_LANGUAGE: ST\n*)\nIF RST THEN\n\tpw := pr;\n\tFULL := FALSE;\n\tEMPTY := TRUE;\n\tDout := DWORD#0;\nELSIF E THEN\n\tIF NOT EMPTY AND RD THEN\n\t\tDout := fifo[pr];\n\t\tpr := INC1(pr,32);\n\t\tEMPTY := pr = pw;\n\t\tFULL := FALSE;\n\tEND_IF;\n\tIF NOT FULL AND WD THEN\n\t\tfifo[pw] := Din;\n\t\tpw := INC1(pw,32);\n\t\tFULL := pw = pr;\n\t\tEMPTY := FALSE;\n\tEND_IF;\nEND_IF;",
+    "description": "32位双字FIFO缓冲区实现，提供更大的数据存储容量。采用与16位版本相同的环形缓冲区算法，但支持32个DWORD数据存储。适用于大数据量缓存、通信数据包存储、历史数据记录等应用场景。",
+    "inputs": [
+      {"name": "DIN", "type": "DWORD", "description": "写入数据输入"},
+      {"name": "E", "type": "BOOL", "description": "使能信号，控制FIFO操作"},
+      {"name": "RD", "type": "BOOL", "description": "读信号，高电平有效"},
+      {"name": "WD", "type": "BOOL", "description": "写信号，高电平有效"},
+      {"name": "RST", "type": "BOOL", "description": "复位信号，清空FIFO"}
+    ],
+    "outputs": [
+      {"name": "DOUT", "type": "DWORD", "description": "读出数据输出"},
+      {"name": "EMPTY", "type": "BOOL", "description": "FIFO空状态指示"},
+      {"name": "FULL", "type": "BOOL", "description": "FIFO满状态指示"}
+    ],
+    "library_dependency": "OSCAT库: oscat_ardw_0_31数组类型, INC1函数",
+    "iec_standard": "IEC 61131-3 数组操作，环形缓冲区算法",
+    "tags": ["FIFO", "大容量缓冲", "数据存储", "环形缓冲", "32位数据", "通信缓存"]
+  },
+  {
+    "instruction": "用st语言制作一个函数块，用于生成指定长度和字符的字符串",
+    "input": "",
+    "output": "VAR_INPUT\n\tC : BYTE;\n\tL : INT;\nEND_VAR\n\nVAR_OUTPUT\n\tFILL : STRING;\nEND_VAR\n\nVAR\n\tN : BYTE;\n\tI : INT;\n\tsx : STRING;\n\tCHR_TO_STRING : CHR_TO_STRING;\n\tFILL_tmp : STRING;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FILL\nIEC_LANGUAGE: ST\n*)\nCHR_TO_STRING(C:=c);\nSx:=CHR_TO_STRING.CHR_TO_STRING;\n(* create string *)\nN := INT_TO_BYTE(LIMIT(0,L,80));\n(* create a string of characters to be connected to str *)\nFILL := '';\nFOR i := 1 TO 8 DO\n\tFILL_tmp := FILL;\n\tFILL := CONCAT(FILL_tmp,FILL);\n\tIF BIT_OF_DWORD(BYTE_TO_DWORD(N),7) THEN FILL := CONCAT(FILL,Sx); END_IF;\n\tN := SHL_BYTE(N,1);\nEND_FOR;",
+    "description": "字符串填充功能块，根据指定字符和长度生成重复字符串。支持最大80个字符的字符串生成，采用位操作优化填充过程。适用于文本格式化、分隔符生成、占位符创建等字符串处理场景。",
+    "inputs": [
+      {"name": "C", "type": "BYTE", "description": "填充字符的ASCII码"},
+      {"name": "L", "type": "INT", "description": "目标字符串长度(0-80)"}
+    ],
+    "outputs": [
+      {"name": "FILL", "type": "STRING", "description": "生成的填充字符串"}
+    ],
+    "library_dependency": "OSCAT库: CHR_TO_STRING函数, BIT_OF_DWORD, SHL_BYTE函数",
+    "iec_standard": "IEC 61131-3 字符串操作，类型转换和位操作",
+    "tags": ["字符串填充", "文本生成", "字符处理", "格式化", "占位符", "字符串操作"]
+  },
+  {
+    "instruction": "用ST语言实现一个带有可编程时间常数的低通滤波器",
+    "input": "",
+    "output": "VAR_INPUT\n\tX : DWORD;\n\tT : TIME;\nEND_VAR\n\nVAR_OUTPUT\n\tY : DWORD;\nEND_VAR\n\nVAR\n\tlast : UDINT;\n\ttx : UDINT;\n\tinit : BOOL;\n\tYi : REAL;\n\tT_PLC_MS : T_PLC_MS;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FILTER_DW\nIEC_LANGUAGE: ST\n*)\n(* read system_time *)\nT_PLC_MS();\ntx := T_PLC_MS.T_PLC_MS;\n\n(* startup initialisation *)\nIF NOT init OR T = t#0s THEN\n\tinit := TRUE;\n\tYi := _DWORD_TO_REAL(X);\nELSE\n\tYi := Yi + (_DWORD_TO_REAL(X) - _DWORD_TO_REAL(Y)) * UDINT_TO_REAL(tx - last) / TIME_TO_REAL(T);\nEND_IF;\nlast := tx;\n\nY := _REAL_TO_DWORD(Yi);",
+    "description": "DWORD类型一阶低通滤波器，具有可编程时间常数。采用指数平滑算法，有效抑制高频噪声同时保留低频信号成分。适用于传感器信号处理、过程控制滤波、数据平滑等工业应用场景。滤波强度可通过时间常数T调节。",
+    "inputs": [
+      {"name": "X", "type": "DWORD", "description": "输入信号(无符号双字)"},
+      {"name": "T", "type": "TIME", "description": "滤波时间常数"}
+    ],
+    "outputs": [
+      {"name": "Y", "type": "DWORD", "description": "滤波后的输出信号"}
+    ],
+    "library_dependency": "OSCAT库: T_PLC_MS系统时间函数, 类型转换函数",
+    "iec_standard": "IEC 61131-3 实时滤波算法，指数平滑处理",
+    "tags": ["低通滤波", "信号处理", "噪声抑制", "指数平滑", "时间常数", "传感器滤波"]
+  },
+  {
+    "instruction": "用ST语言实现一个带有可编程时间常数的整数型低通滤波器",
+    "input": "",
+    "output": "VAR_INPUT\n\tX : INT;\n\tT : TIME;\nEND_VAR\n\nVAR_OUTPUT\n\tY : INT;\nEND_VAR\n\nVAR\n\tYi : DINT;\n\tlast : UDINT;\n\ttx : UDINT;\n\tinit : BOOL;\n\tT_PLC_MS : T_PLC_MS;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FILTER_I\nIEC_LANGUAGE: ST\n*)\n(* read system time *)\nT_PLC_MS();\ntx := T_PLC_MS.T_PLC_MS;\n\n(* startup initialisation *)\nIF NOT init OR T = t#0s THEN\n\tinit := TRUE;\n\tYi := INT_TO_DINT(X) * DINT#1000;\nELSE\n\t(* to increase accuracy of the filter we calculate internal Yi wich is Y * 1000 *)\n\tYi := Yi + INT_TO_DINT(X - Y) * UDINT_TO_DINT(tx - last) * DINT#1000 / TIME_TO_DINT(T);\nEND_IF;\nlast := tx;\nY := DINT_TO_INT(yi / DINT#1000);",
+    "description": "INT类型整数低通滤波器，采用内部高精度计算提高滤波精度。通过将内部计算精度提高1000倍，有效减少量化误差。适用于整数传感器信号、计数器值、温度测量等需要平滑处理的整数数据。",
+    "inputs": [
+      {"name": "X", "type": "INT", "description": "输入信号(有符号整数)"},
+      {"name": "T", "type": "TIME", "description": "滤波时间常数"}
+    ],
+    "outputs": [
+      {"name": "Y", "type": "INT", "description": "滤波后的输出信号"}
+    ],
+    "library_dependency": "OSCAT库: T_PLC_MS系统时间函数, 高精度类型转换",
+    "iec_standard": "IEC 61131-3 高精度滤波算法，量化误差优化",
+    "tags": ["整数滤波", "高精度处理", "量化误差", "信号平滑", "温度滤波", "计数器平滑"]
+  },
+  {
+    "instruction": "用st语言实现一个用于DWORD格式数据的可编程长度的移动平均滤波器",
+    "input": "",
+    "output": "VAR_INPUT\n\tX : DWORD;\n\tN : UINT;\n\tRST : BOOL;\nEND_VAR\n\nVAR_OUTPUT\n\tY : DWORD;\nEND_VAR\n\nVAR\n\tinit : BOOL;\n\tbuffer : oscat_ardw_0_31;\n\ti : INT;\n\ttmp : INT;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FILTER_MAV_DW\nIEC_LANGUAGE: ST\n*)\n(* 限制 N 为缓冲区的大小 *)\nN := MIN(N, UINT#32);\n\n(* 启动初始化 *)\nIF NOT init OR rst OR N = UINT#0 THEN\n\tinit := TRUE;\n\ttmp := UINT_TO_INT(N)-1;\n\tFOR i := 0 TO tmp DO\n\t\tbuffer[i] := X;\n\tEND_FOR;\n\tY := X;\nELSE\n\ttmp := UINT_TO_INT(N);\n\ti := INC1(i, tmp);\n\tY := UDINT_TO_DWORD(DWORD_TO_UDINT(Y) + (DWORD_TO_UDINT(X) - DWORD_TO_UDINT(buffer[i])) / UINT_TO_UDINT(N));\n\tbuffer[i] := X;\nEND_IF;",
+    "description": "DWORD类型移动平均滤波器，支持1-32个样本的可编程窗口长度。采用高效更新算法，每次只需计算新样本与最老样本的差值。适用于去除周期性噪声、平滑趋势数据、移动窗口分析等应用。",
+    "inputs": [
+      {"name": "X", "type": "DWORD", "description": "输入信号(无符号双字)"},
+      {"name": "N", "type": "UINT", "description": "移动平均窗口长度(1-32)"},
+      {"name": "RST", "type": "BOOL", "description": "复位信号，重新初始化缓冲区"}
+    ],
+    "outputs": [
+      {"name": "Y", "type": "DWORD", "description": "移动平均输出结果"}
+    ],
+    "library_dependency": "OSCAT库: oscat_ardw_0_31数组类型, INC1函数",
+    "iec_standard": "IEC 61131-3 移动平均算法，高效窗口更新",
+    "tags": ["移动平均", "窗口滤波", "趋势平滑", "周期性噪声", "高效算法", "数据平滑"]
+  },
+  {
+    "instruction": "用st语言实现一个用于WORD格式数据的可编程长度的移动平均滤波器",
+    "input": "",
+    "output": "VAR_INPUT\n\tX : WORD;\n\tN : UINT;\n\tRST : BOOL;\nEND_VAR\n\nVAR_OUTPUT\n\tY : WORD;\nEND_VAR\n\nVAR\n\tinit : BOOL;\n\tbuffer : oscat_FILTER_MAV_W;\n\ti : INT;\n\tsum : UDINT;\n\ttmp : INT;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FILTER_MAV_W\nIEC_LANGUAGE: ST\n*)\n(* 限制 N 为缓冲区的大小 *)\nN := MIN(N, UINT#32);\n\n(* 启动初始化 *)\nIF NOT init OR rst OR N = UINT#0 THEN\n\tinit := TRUE;\n\ttmp := UINT_TO_INT(N) - 1;\n\tFOR i := 1 TO tmp DO\n\t\tbuffer[i] := X;\n\tEND_FOR;\n\tsum := UINT_TO_UDINT(WORD_TO_UINT(Y) * N);\n\tY := X;\nELSE\n\ttmp := UINT_TO_INT(N);\n\ti := INC1(i, tmp);\n\tsum := sum + WORD_TO_UDINT(X) - WORD_TO_UDINT(buffer[i]);\n\tY := UDINT_TO_WORD(sum / UINT_TO_UDINT(N));\n\tbuffer[i] := X;\nEND_IF;",
+    "description": "WORD类型移动平均滤波器，采用累加和优化算法提高计算效率。维护内部累加和避免重复计算，适合16位数据平滑处理。适用于模拟量输入滤波、传感器数据处理、趋势分析等工业应用。",
+    "inputs": [
+      {"name": "X", "type": "WORD", "description": "输入信号(无符号字)"},
+      {"name": "N", "type": "UINT", "description": "移动平均窗口长度(1-32)"},
+      {"name": "RST", "type": "BOOL", "description": "复位信号，重新初始化缓冲区"}
+    ],
+    "outputs": [
+      {"name": "Y", "type": "WORD", "description": "移动平均输出结果"}
+    ],
+    "library_dependency": "OSCAT库: oscat_FILTER_MAV_W数组类型, INC1函数",
+    "iec_standard": "IEC 61131-3 优化移动平均，累加和算法",
+    "tags": ["字类型滤波", "累加和优化", "16位数据", "模拟量滤波", "传感器处理", "高效计算"]
+  },
+  {
+    "instruction": "用st语言实现一个用于WORD格式数据的可编程时间低通滤波器",
+    "input": "",
+    "output": "VAR_INPUT\n\tX : WORD;\n\tT : TIME;\nEND_VAR\n\nVAR_OUTPUT\n\tY : WORD;\nEND_VAR\n\nVAR\n\tlast : UDINT;\n\ttx : UDINT;\n\tinit : BOOL;\n\ttmp : DINT;\n\tT_PLC_MS : T_PLC_MS;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FILTER_W\nIEC_LANGUAGE: ST\n*)\n(* 读取系统时间 *)\nT_PLC_MS();\ntx := T_PLC_MS.T_PLC_MS;\n\n(* 启动初始化 *)\nIF NOT init OR T = T#0s THEN\n\tinit := TRUE;\n\tlast := tx;\n\tY := X;\nELSIF Y = X THEN\n\tlast := tx;\nELSE\n\ttmp := UINT_TO_DINT(WORD_TO_UINT(X) - WORD_TO_UINT(Y)) * UDINT_TO_DINT(tx - last) / TIME_TO_DINT(T);\n\tIF tmp <> DINT#0 THEN\n\t\tY := DINT_TO_WORD(WORD_TO_DINT(Y) + tmp);\n\t\tlast := tx;\n\tEND_IF;\nEND_IF;",
+    "description": "WORD类型一阶低通滤波器，采用差分算法实现平滑滤波。通过计算输入变化率并限制变化速度来实现滤波效果。适用于温度信号、压力信号、流量信号等模拟量输入的平滑处理。",
+    "inputs": [
+      {"name": "X", "type": "WORD", "description": "输入信号(无符号字)"},
+      {"name": "T", "type": "TIME", "description": "滤波时间常数"}
+    ],
+    "outputs": [
+      {"name": "Y", "type": "WORD", "description": "滤波后的输出信号"}
+    ],
+    "library_dependency": "OSCAT库: T_PLC_MS系统时间函数",
+    "iec_standard": "IEC 61131-3 差分滤波算法，变化率限制",
+    "tags": ["字类型滤波", "差分算法", "变化率限制", "模拟量平滑", "温度滤波", "压力滤波"]
+  },
+  {
+    "instruction": "用ST语言实现一个带有可编程长度N的加权移动平均滤波器，用于处理REAL类型的输入数据",
+    "input": "",
+    "output": "VAR_INPUT\n\tX : REAL;\n\tW : oscat_arr_0_15;\n\tRST : BOOL;\nEND_VAR\n\nVAR_OUTPUT\n\tY : REAL;\nEND_VAR\n\nVAR\n\tinit : BOOL;\n\tbuffer : oscat_arr_0_15;\n\ti : INT;\n\tn : INT;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FILTER_WAV\nIEC_LANGUAGE: ST\n*)\n(* 启动初始化 *)\nIF NOT init OR rst THEN\n\tinit := TRUE;\n\tFOR i := 0 TO 15 DO\n\t\tbuffer[i] := X;\n\tEND_FOR;\n\ti := 15;\n\tY := X;\nELSE\n\ti := INC1(i, 16);\n\tbuffer[i] := X;\nEND_IF;\n\n(* 计算加权平均值 *)\nY := 0.0;\nFOR n := 0 TO 15 DO\n\tY := buffer[i] * W[n] + Y;\n\ti := DEC1(i, 16);\nEND_FOR;",
+    "description": "16点加权移动平均滤波器，支持自定义权重系数。相比简单移动平均，加权滤波器可以强调近期数据或特定位置数据的重要性。适用于趋势预测、信号增强、噪声抑制等需要特定频率响应的应用。",
+    "inputs": [
+      {"name": "X", "type": "REAL", "description": "输入信号(实数)"},
+      {"name": "W", "type": "oscat_arr_0_15", "description": "16个权重系数数组"},
+      {"name": "RST", "type": "BOOL", "description": "复位信号，重新初始化缓冲区"}
+    ],
+    "outputs": [
+      {"name": "Y", "type": "REAL", "description": "加权移动平均输出"}
+    ],
+    "library_dependency": "OSCAT库: oscat_arr_0_15数组类型, INC1/DEC1函数",
+    "iec_standard": "IEC 61131-3 加权平均算法，FIR滤波器实现",
+    "tags": ["加权滤波", "移动平均", "权重系数", "频率响应", "信号增强", "趋势预测"]
+  },
+  {
+    "instruction": "输入一段字符串，查找第一个非控制字符的起始位置，给出st语言代码",
+    "input": "",
+    "output": "VAR_INPUT\n\tSTR : STRING;\n\tPOS : INT;\nEND_VAR\n\nVAR_OUTPUT\n\tFIND_CHAR : INT;\nEND_VAR\n\nVAR\n\tEXT_ASCII : BOOL;\n\tX : INT;\n\tstop : INT;\n\ti : INT;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FIND_CHAR\nIEC_LANGUAGE: ST\n*)\nEXT_ASCII := SETUP_EXTENDED_ASCII(FALSE);\n\nstop := LEN(str);\nFOR i := MAX(pos,1) TO stop DO;\n\tX := GET_CHAR(str,i);\n\tIF X > 31 AND ((EXT_ASCII AND X <> 127) OR (NOT EXT_ASCII AND X < 127)) THEN\n\t\tFIND_CHAR := i;\n\t\tRETURN;\n\tEND_IF;\nEND_FOR;\nFIND_CHAR := 0;",
+    "description": "字符串非控制字符查找函数，从指定位置开始搜索第一个可打印字符。支持ASCII和扩展ASCII字符集，能够识别控制字符（0-31）和删除字符（127）。适用于文本解析、数据清理、输入验证等字符串处理应用。",
+    "inputs": [
+      {"name": "STR", "type": "STRING", "description": "待搜索的字符串"},
+      {"name": "POS", "type": "INT", "description": "搜索起始位置"}
+    ],
+    "outputs": [
+      {"name": "FIND_CHAR", "type": "INT", "description": "第一个非控制字符位置(0表示未找到)"}
+    ],
+    "library_dependency": "OSCAT库: SETUP_EXTENDED_ASCII, GET_CHAR函数",
+    "iec_standard": "IEC 61131-3 字符串处理，字符编码识别",
+    "tags": ["字符查找", "非控制字符", "文本解析", "ASCII处理", "数据清理", "输入验证"]
+  },
+  {
+    "instruction": "输入一段字符串，查找第一个控制字符的起始位置，给出st语言代码",
+    "input": "",
+    "output": "VAR_INPUT\n\tSTR : STRING;\n\tPOS : INT;\nEND_VAR\n\nVAR_OUTPUT\n\tFIND_CTRL : INT;\nEND_VAR\n\nVAR\n\tx : INT;\n\tstop : INT;\n\ti : INT;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FIND_CTRL\nIEC_LANGUAGE: ST\n*)\nstop := LEN(str);\nFOR i := MAX(pos,1) TO stop DO;\n\tx := GET_CHAR(str,i);\n\tIF (x < 32) OR (x = 127) THEN\n\t\tFIND_CTRL := i;\n\t\tRETURN;\n\tEND_IF;\nEND_FOR;\nFIND_CTRL := 0;",
+    "description": "字符串控制字符查找函数，定位第一个控制字符的位置。控制字符包括ASCII码0-31的控制字符和删除字符（127）。适用于协议解析、文本清理、特殊字符检测等应用场景，有助于识别和处理不可打印字符。",
+    "inputs": [
+      {"name": "STR", "type": "STRING", "description": "待搜索的字符串"},
+      {"name": "POS", "type": "INT", "description": "搜索起始位置"}
+    ],
+    "outputs": [
+      {"name": "FIND_CTRL", "type": "INT", "description": "第一个控制字符位置(0表示未找到)"}
+    ],
+    "library_dependency": "OSCAT库: GET_CHAR函数",
+    "iec_standard": "IEC 61131-3 字符处理，控制字符识别",
+    "tags": ["控制字符", "字符检测", "协议解析", "文本清理", "特殊字符", "ASCII控制"]
+  },
+  {
+    "instruction": "输入一段字符串，查找第一个不是数字的字符的位置，用st语言实现",
+    "input": "",
+    "output": "VAR_INPUT\n\tSTR : STRING;\n\tPOS : INT;\nEND_VAR\n\nVAR_OUTPUT\n\tFIND_NONUM : INT;\nEND_VAR\n\nVAR\n\tX : INT;\n\tend : INT;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FIND_NONUM\nIEC_LANGUAGE: ST\n*)\nend := LEN(str);\nFOR pos := MAX(pos,1) TO LEN(str) DO;\n\tX := GET_CHAR(str,pos);\n\tIF (X < 48 AND X <> 46) OR X > 57 THEN\n\t\tfind_nonum := pos;\n\t\tRETURN;\n\tEND_IF;\nEND_FOR;\nfind_nonum := 0;",
+    "description": "字符串非数字字符查找函数，从指定位置搜索第一个非数字字符。数字字符包括0-9（ASCII 48-57）和小数点（ASCII 46）。适用于数字字符串验证、数值解析边界检测、输入格式检查等应用场景。",
+    "inputs": [
+      {"name": "STR", "type": "STRING", "description": "待搜索的字符串"},
+      {"name": "POS", "type": "INT", "description": "搜索起始位置"}
+    ],
+    "outputs": [
+      {"name": "FIND_NONUM", "type": "INT", "description": "第一个非数字字符位置(0表示未找到)"}
+    ],
+    "library_dependency": "OSCAT库: GET_CHAR函数",
+    "iec_standard": "IEC 61131-3 字符编码处理，数字字符识别",
+    "tags": ["非数字字符", "数字验证", "字符串解析", "输入检查", "格式验证", "数值边界"]
+  },
+  {
+    "instruction": "输入一段字符串，查找第一个数字的起始位置，用ST语言实现",
+    "input": "",
+    "output": "VAR_INPUT\n\tSTR : STRING;\n\tPOS : INT;\nEND_VAR\n\nVAR_OUTPUT\n\tFIND_NUM : INT;\nEND_VAR\n\nVAR\n\tX : INT;\n\tstop : INT;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FIND_NUM\nIEC_LANGUAGE: ST\n*)\nstop := LEN(str);\nFOR pos := MAX(pos,1) TO stop DO;\n\tX := GET_CHAR(str,pos);\n\tIF (X > 47 AND X < 58) OR X = 46 THEN\n\t\tfind_num := pos;\n\t\tRETURN;\n\tEND_IF;\nEND_FOR;\nfind_num := 0;",
+    "description": "字符串数字字符查找函数，定位第一个数字或小数点的位置。支持数字0-9和小数点的识别，常用于数值提取、字符串解析、数据转换等应用。在工业应用中可用于解析测量数据、配置参数等包含数值的文本信息。",
+    "inputs": [
+      {"name": "STR", "type": "STRING", "description": "待搜索的字符串"},
+      {"name": "POS", "type": "INT", "description": "搜索起始位置"}
+    ],
+    "outputs": [
+      {"name": "FIND_NUM", "type": "INT", "description": "第一个数字字符位置(0表示未找到)"}
+    ],
+    "library_dependency": "OSCAT库: GET_CHAR函数",
+    "iec_standard": "IEC 61131-3 字符识别，数字字符检测",
+    "tags": ["数字查找", "数值提取", "字符串解析", "数据转换", "测量数据", "配置解析"]
+  },
+  {
+    "instruction": "在输入的长字符串STR1中从右向左查找子字符串STR2，并返回最后一个匹配的字符在长字符串中的位置",
+    "input": "",
+    "output": "VAR_INPUT\n\tSTR1 : oscat_STRING250;\n\tSTR2 : STRING;\nEND_VAR\n\nVAR_OUTPUT\n\tFINDB : INT;\nEND_VAR\n\nVAR\n\tpos : INT;\n\tlength : INT;\n\tstring_temp : oscat_STRING250;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FINDB\nIEC_LANGUAGE: ST\n*)\nlength := LEN(str2);\npos := LEN(str1) - length + 1;\nWHILE (pos >= 1) DO\n\tstring_temp := MID(str1,length,pos);\n\tIF EQ_STRING(string_temp,str2) THEN\n\t\tFindB := pos;\n\t\tRETURN;\n\tEND_IF;\npos := pos - 1;\nEND_WHILE;\nFindB := 0;",
+    "description": "反向字符串查找函数，从右向左搜索子字符串的最后一次出现位置。使用oscat_STRING250类型支持长字符串处理，适用于日志分析、文件路径解析、配置参数查找等需要从字符串末尾开始搜索的应用场景。",
+    "inputs": [
+      {"name": "STR1", "type": "oscat_STRING250", "description": "被搜索的长字符串"},
+      {"name": "STR2", "type": "STRING", "description": "要查找的子字符串"}
+    ],
+    "outputs": [
+      {"name": "FINDB", "type": "INT", "description": "最后匹配位置(0表示未找到)"}
+    ],
+    "library_dependency": "OSCAT库: oscat_STRING250类型, EQ_STRING, MID函数",
+    "iec_standard": "IEC 61131-3 字符串搜索，反向查找算法",
+    "tags": ["反向查找", "字符串搜索", "日志分析", "路径解析", "配置查找", "最后一次匹配"]
+  },
+  {
+    "instruction": "在输入的字符串中从后向前查找，返回最后一个不是数字的字符的位置，给出ST语言代码",
+    "input": "",
+    "output": "VAR_INPUT\n\tSTR : STRING;\nEND_VAR\n\nVAR_OUTPUT\n\tFINDB_NONUM : INT;\nEND_VAR\n\nVAR\n\tpos : INT;\n\tx : INT;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FINDB_NONUM\nIEC_LANGUAGE: ST\n*)\npos := LEN(str);\nWHILE (pos >= 1) DO\n\tx := GET_CHAR(str,pos);\n\tIF (X < 48 AND X <> 46) OR X > 57 THEN\n\t\tfindB_nonum := pos;\n\t\tRETURN;\n\tEND_IF;\npos := pos - 1;\nEND_WHILE;\nfindB_nonum := 0;",
+    "description": "反向非数字字符查找函数，从字符串末尾开始向前搜索第一个非数字字符。数字定义包括0-9和小数点。适用于从字符串末尾提取数值、文件扩展名解析、版本号处理等需要从后向前分析字符串的应用。",
+    "inputs": [
+      {"name": "STR", "type": "STRING", "description": "待搜索的字符串"}
+    ],
+    "outputs": [
+      {"name": "FINDB_NONUM", "type": "INT", "description": "最后一个非数字字符位置(0表示未找到)"}
+    ],
+    "library_dependency": "OSCAT库: GET_CHAR函数",
+    "iec_standard": "IEC 61131-3 反向字符串处理，字符分类识别",
+    "tags": ["反向查找", "非数字字符", "数值提取", "扩展名解析", "版本号处理", "字符串分析"]
+  },
+  {
+    "instruction": "在输入的字符串中从后向前查找，返回最后一个数字（包括小数点）的位置，给我st语言代码",
+    "input": "",
+    "output": "VAR_INPUT\n\tSTR : STRING;\nEND_VAR\n\nVAR_OUTPUT\n\tFINDB_NUM : INT;\nEND_VAR\n\nVAR\n\tpos : INT;\n\tx : INT;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FINDB_NUM\nIEC_LANGUAGE: ST\n*)\nfindB_num := 0;\npos := LEN(str);\nWHILE (pos >= 1) DO\n\tx := GET_CHAR(str,pos);\n\tIF (x > 47 AND x < 58) OR x = 46 THEN\n\t\tfindB_num := pos;\n\t\tRETURN;\n\tEND_IF;\npos := pos - 1;\nEND_WHILE;",
+    "description": "反向数字字符查找函数，从字符串末尾向前搜索最后一个数字或小数点。适用于提取字符串末尾的数值信息，如文件编号、版本号、测量值等。在工业应用中常用于解析设备编号、批次号等包含数字的标识符。",
+    "inputs": [
+      {"name": "STR", "type": "STRING", "description": "待搜索的字符串"}
+    ],
+    "outputs": [
+      {"name": "FINDB_NUM", "type": "INT", "description": "最后一个数字字符位置(0表示未找到)"}
+    ],
+    "library_dependency": "OSCAT库: GET_CHAR函数",
+    "iec_standard": "IEC 61131-3 反向搜索算法，数字字符识别",
+    "tags": ["反向数字查找", "末尾数值提取", "文件编号", "版本号解析", "设备标识", "批次号处理"]
+  },
+  {
+    "instruction": "使用st语言，在输入的字符串中从指定位置开始查找子字符串，并返回第一次出现的位置",
+    "input": "",
+    "output": "VAR_INPUT\n\tSTR : STRING;\n\tSRC : STRING;\n\tPOS : INT;\nEND_VAR\n\nVAR_OUTPUT\n\tFINDP : INT;\nEND_VAR\n\nVAR\n\ti : INT;\n\tls : INT;\n\tlx : INT;\n\tstp : INT;\n\tst_tmp : STRING;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FINDP\nIEC_LANGUAGE: ST\n*)\nls := LEN(str);\nlx := LEN(src);\nIF ls < lx OR lx = 0 THEN RETURN; END_IF;\nstp := ls - lx + 1;\nFOR i := MAX(pos,1) TO stp DO\n\tst_tmp := MID(str,lx,i);\n\tIF EQ_STRING(st_tmp,src) THEN\n\t\tFINDP := i;\n\t\tRETURN;\n\tEND_IF;\nEND_FOR;\nFINDP := 0;",
+    "description": "子字符串查找函数，从指定位置开始搜索子字符串的第一次出现位置。支持从任意位置开始的前向搜索，适用于文本解析、配置参数查找、关键字定位等应用。函数包含边界检查和长度验证，确保搜索的安全性和准确性。",
+    "inputs": [
+      {"name": "STR", "type": "STRING", "description": "被搜索的主字符串"},
+      {"name": "SRC", "type": "STRING", "description": "要查找的子字符串"},
+      {"name": "POS", "type": "INT", "description": "搜索起始位置"}
+    ],
+    "outputs": [
+      {"name": "FINDP", "type": "INT", "description": "子字符串位置(0表示未找到)"}
+    ],
+    "library_dependency": "OSCAT库: EQ_STRING, MID, LEN函数",
+    "iec_standard": "IEC 61131-3 字符串搜索算法，子串匹配",
+    "tags": ["子字符串查找", "文本搜索", "配置解析", "关键字定位", "参数查找", "字符串匹配"]
+  },
+  {
+    "instruction": "用st语言根据输入的参数对字符串进行截断或填充",
+    "input": "",
+    "output": "VAR_INPUT\n\tSTR : oscat_STRING250;\n\tL : INT;\n\tC : BYTE;\n\tM : INT;\nEND_VAR\n\nVAR_OUTPUT\n\tFIX : oscat_STRING250;\nEND_VAR\n\nVAR\n\tN : INT;\n\tFILL : FILL;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FIX\nIEC_LANGUAGE: ST\n*)\n(* 确保 L 不超过字符串的限制 *)\nN := LIMIT(0,L,255) - LEN(str);\nIF N <= 0 THEN\n\t(* 截断字符串到长度 N *)\n\tIF M = 1 THEN\n\t\tFIX := RIGHT(str,L);\n\tELSE\n\t\tFIX := LEFT(str,L);\n\tEND_IF;\nELSIF M = 1 THEN\n\t(* 在字符串前连接填充字符 *)\n\tFILL(C:=C,L:=N);\n\tFIX := CONCAT(FILL.FILL,str);\nELSIF M = 2 THEN\n\t(* 将 str 居中于填充字符之间 *)\n\t(* 对于奇数个填充字符，最后一个填充字符放在末尾 *)\n\tFILL(C:=C,L:=_BYTE_TO_INT(SHR_BYTE(INT_TO_BYTE(N+1),1)));\n\tFIX := CONCAT(str,FILL.FILL);\n\tFILL(C:=C,L:=_BYTE_TO_INT(SHR_BYTE(INT_TO_BYTE(N),1)));\n\tFIX := CONCAT(FILL.FILL,FIX);\nELSE\n\t(* 在字符串末尾连接填充字符 *)\n\tFILL(C:=C,L:=N);\n\tFIX := CONCAT(str,FILL.FILL);\nEND_IF;",
+    "description": "多功能字符串格式化函数，支持截断、左填充、右填充和居中对齐。根据目标长度和模式参数对输入字符串进行格式化，使用指定字符进行填充。适用于文本对齐、数据格式化、报表生成、固定宽度输出等应用场景。",
+    "inputs": [
+      {"name": "STR", "type": "oscat_STRING250", "description": "待格式化的字符串"},
+      {"name": "L", "type": "INT", "description": "目标长度"},
+      {"name": "C", "type": "BYTE", "description": "填充字符的ASCII码"},
+      {"name": "M", "type": "INT", "description": "模式:0=右填充,1=左填充,2=居中"}
+    ],
+    "outputs": [
+      {"name": "FIX", "type": "oscat_STRING250", "description": "格式化后的字符串"}
+    ],
+    "library_dependency": "OSCAT库: FILL功能块, LEFT/RIGHT/CONCAT函数, 位操作函数",
+    "iec_standard": "IEC 61131-3 字符串操作，格式化和对齐算法",
+    "tags": ["字符串格式化", "文本对齐", "填充截断", "数据格式化", "报表生成", "固定宽度"]
+  },
+  {
+    "instruction": "用st语言将输入的字符串中的浮点数转换为REAL类型的数值",
+    "input": "",
+    "output": "VAR_INPUT\n\tFLT : oscat_STRING20;\nEND_VAR\n\nVAR_OUTPUT\n\tFLOAT_TO_REAL : REAL;\nEND_VAR\n\nVAR\n\ti : INT;\n\tX : BYTE;\n\tsign : INT := 1;\n\tstop : INT;\n\ttmp : DINT;\n\td : INT;\n\tDEC_TO_INT : DEC_TO_INT;\n\tCODE : CODE;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FLOAT_TO_REAL\nIEC_LANGUAGE: ST\n*)\nsign := 1;\nd := 0;\nstop := LEN(FLT);\ntmp := DINT#0;\n\n(* 首先检查符号并在遇到第一个数字或点时退出 *)\nFOR i := 1 TO stop DO\n\tCODE(STR:=FLT,POS:=i);\n\tX := CODE.CODE;\n\tIF X > BYTE#47 AND X < BYTE#58 OR X = BYTE#46 THEN\n\t\tEXIT;\n\tELSIF X = BYTE#45 THEN\n\t\t(* 代码 45 是符号 *)\n\t\tsign := -1;\n\tEND_IF;\nEND_FOR;\n\n(* 现在扫描数字直到遇到结束、点或 E *)\nFOR i := i TO stop DO\n\tCODE(STR:=FLT,POS:=i);\n\tX := CODE.CODE;\n\tIF X = BYTE#44 OR X = BYTE#46 OR X = BYTE#69 OR X = BYTE#101 THEN\n\t\tEXIT;\n\t(* 计算数字的值 *)\n\tELSIF X > BYTE#47 AND X < BYTE#58 THEN\n\t\ttmp := tmp * DINT#10 + _BYTE_TO_DINT(X) - DINT#48;\n\tEND_IF;\nEND_FOR;\n\n(* 处理逗号后的部分，如果遇到逗号或点并且指数开始，则退出 *)\nIF x = BYTE#44 OR X = BYTE#46 THEN\n\tFOR i := i + 1 TO stop DO\n\t\tCODE(STR:=FLT,POS:=i);\n\t\tX := CODE.CODE;\n\t\tIF X = BYTE#69 OR X = BYTE#101 THEN\n\t\t\tEXIT;\n\t\tELSIF x > BYTE#47 AND x < BYTE#58 THEN\n\t\t\ttmp := tmp * DINT#10 + _BYTE_TO_DINT(X) - DINT#48;\n\t\t\td := d - 1;\n\t\tEND_IF;\n\tEND_FOR;\nEND_IF;\n\n(* 如果存在指数部分则处理 *)\nIF (X = BYTE#69 OR X = BYTE#101) AND i<=stop THEN\n\tDEC_TO_INT(DEC:=MID(FLT, MIN(stop - i,10),MIN(stop,i+1)));\n\td := d + DEC_TO_INT.DEC_TO_INT;\n\n\n(*\n\tDEC_TO_INT(DEC:=RIGHT(FLT, MIN(stop - i,10)));\n\td := d + DEC_TO_INT.DEC_TO_INT;\n*)\nEND_IF;\n\nFLOAT_TO_REAL := EXPN(10.0, d) * DINT_TO_REAL(TMP * INT_TO_DINT(SIGN));",
+    "description": "字符串浮点数转换函数，将文本格式的浮点数转换为REAL类型数值。支持科学计数法表示（如1.23E-4），能够处理正负号、小数点和指数部分。适用于配置文件解析、通信数据处理、用户输入转换等需要将文本数值转换为内部数值格式的场景。",
+    "inputs": [
+      {"name": "FLT", "type": "oscat_STRING20", "description": "包含浮点数的字符串"}
+    ],
+    "outputs": [
+      {"name": "FLOAT_TO_REAL", "type": "REAL", "description": "转换后的REAL数值"}
+    ],
+    "library_dependency": "OSCAT库: CODE, DEC_TO_INT, EXPN函数, MID/RIGHT函数",
+    "iec_standard": "IEC 61131-3 字符串解析，浮点数转换算法",
+    "tags": ["字符串转换", "浮点数解析", "科学计数法", "文本数值", "配置解析", "通信处理"]
+  },
+  {
+    "instruction": "用ST语言实现向下取整函数",
+    "input": "",
+    "output": "VAR_INPUT\n\tX : REAL;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FLOOR\nIEC_LANGUAGE: ST\n*)\nFLOOR := REAL_TO_INT(X);\nIF INT_TO_REAL(FLOOR) > X THEN\n\tfloor := floor - 1;\nEND_IF;",
+    "description": "REAL类型向下取整函数，返回不大于输入值的最大整数。通过类型转换和比较运算实现精确的向下取整功能，处理正数和负数的不同情况。适用于数学计算、坐标转换、数据离散化等需要向下取整操作的应用场景。",
+    "inputs": [
+      {"name": "X", "type": "REAL", "description": "输入的实数值"}
+    ],
+    "outputs": [
+      {"name": "FLOOR", "type": "INT", "description": "向下取整结果"}
+    ],
+    "library_dependency": "无特殊库依赖，使用标准IEC 61131-3类型转换",
+    "iec_standard": "IEC 61131-3 数学函数，取整运算实现",
+    "tags": ["向下取整", "数学函数", "实数转换", "坐标离散化", "数据量化", "数值处理"]
+  },
+  {
+    "instruction": "用ST语言实现DINT类型整数的向下取整函数",
+    "input": "",
+    "output": "VAR_INPUT\n\tX : REAL;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FLOOR2\nIEC_LANGUAGE: ST\n*)\nFLOOR2 := _REAL_TO_DINT(X);\nIF DINT_TO_REAL(FLOOR2) > X THEN\n\tFLOOR2 := FLOOR2 - DINT#1;\nEND_IF;",
+    "description": "REAL到DINT类型的向下取整函数，提供双精度整数输出。相比标准FLOOR函数，支持更大范围的整数结果（-2,147,483,648到2,147,483,647）。适用于大范围数值计算、高精度坐标转换、大数据量统计等需要大整数结果的应用。",
+    "inputs": [
+      {"name": "X", "type": "REAL", "description": "输入的实数值"}
+    ],
+    "outputs": [
+      {"name": "FLOOR2", "type": "DINT", "description": "DINT类型的向下取整结果"}
+    ],
+    "library_dependency": "OSCAT库: _REAL_TO_DINT扩展类型转换函数",
+    "iec_standard": "IEC 61131-3 扩展精度数学函数，大整数处理",
+    "tags": ["DINT取整", "双精度", "大整数", "高精度计算", "坐标转换", "大数据统计"]
+  },
+  {
+    "instruction": "用st语言实现控制流程中的阀门",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : BOOL;\n\tREQ : BOOL;\n\tENQ : BOOL;\n\tRST : BOOL := FALSE;\n\tT_AUTO : TIME := T#1h;\n\tT_DELAY : TIME := T#23h;\nEND_VAR\n\nVAR_OUTPUT\n\tQ : BOOL;\n\tSTATUS : BYTE;\nEND_VAR\n\nVAR\n\ttimer : TP_1D;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FLOW_CONTROL\nIEC_LANGUAGE: ST\n*)\nSTATUS := BYTE#100;\nIF RST THEN\n\tQ := FALSE;\n\ttimer(rst := TRUE);\n\ttimer.RST := FALSE;\n\tSTATUS := BYTE#103;\nELSIF ENQ THEN\n\tIF IN THEN\n\t\tstatus := BYTE#101;\n\tEND_IF;\n\tIF REQ THEN\n\t\t(* 定时器在 TP 高电平后会生成一个定时脉冲 *)\n\t\ttimer.PT1 := T_AUTO;\n\t\ttimer.PTD := T_DELAY;\n\t\ttimer.IN := TRUE;\n\t\tSTATUS := BYTE#102;\n\tEND_IF;\nEND_IF;\n\n(* 设置输出并运行定时器 *)\ntimer();\ntimer.IN := FALSE;\nQ := (IN AND ENQ) OR timer.Q;",
+    "description": "工业流程控制阀门功能块，实现阀门的自动控制和安全保护。支持手动/自动模式切换、定时控制、状态指示等功能。包含复位、请求和使能输入，提供阀门输出和状态反馈。适用于液体/气体流量控制、过程自动化、安全联锁系统等工业应用。",
+    "inputs": [
+      {"name": "IN", "type": "BOOL", "description": "阀门输入信号"},
+      {"name": "REQ", "type": "BOOL", "description": "请求信号，触发定时控制"},
+      {"name": "ENQ", "type": "BOOL", "description": "使能信号，允许阀门操作"},
+      {"name": "RST", "type": "BOOL", "description": "复位信号，关闭阀门并重置定时器"},
+      {"name": "T_AUTO", "type": "TIME", "description": "自动模式时间设定"},
+      {"name": "T_DELAY", "type": "TIME", "description": "延迟时间设定"}
+    ],
+    "outputs": [
+      {"name": "Q", "type": "BOOL", "description": "阀门输出控制信号"},
+      {"name": "STATUS", "type": "BYTE", "description": "阀门状态指示"}
+    ],
+    "library_dependency": "OSCAT库: TP_1D定时器功能块",
+    "iec_standard": "IEC 61131-3 工业控制逻辑，阀门控制算法",
+    "tags": ["阀门控制", "流程控制", "定时控制", "安全联锁", "过程自动化", "流量调节"]
+  },
+  {
+    "instruction": "控制4个阀门的操作，以及生成安全阀信号和故障诊断，给出st语言代码",
+    "input": "",
+    "output": "VAR_INPUT\n\tI0 : BOOL;\n\tI1 : BOOL;\n\tI2 : BOOL;\n\tI3 : BOOL;\n\tPR : BOOL;\n\tICE : BOOL;\n\tDIAG : BOOL;\n\tENQ : BOOL;\n\tRST : BOOL := FALSE;\n\tTD_WAIT : TIME := T#5s;\n\tTD_S : TIME := T#10s;\n\tTD_0 : TIME := T#10s;\nEND_VAR\n\nVAR_OUTPUT\n\tQS : BOOL;\n\tQ0 : BOOL;\n\tQ1 : BOOL;\n\tQ2 : BOOL;\n\tQ3 : BOOL;\n\tERROR : BOOL;\n\tSTATUS : BYTE;\nEND_VAR\n\nVAR\n\tstate : INT;\n\ttimer : TP;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FLOW_CONTROL_4\nIEC_LANGUAGE: ST\n*)\nIF RST THEN\n\tSTATUS := BYTE#100;\n\tstate := 0;\n\terror := FALSE;\n\nELSIF DIAG THEN\n\t(* 诊断通过打开QS并等待TD_WAIT来施加压力，\n\t然后关闭所有阀门并等待TD_WAIT，打开阀门_0并检查TD_0后的压力，\n\t如果压力过低，则存在错误。对所有阀门继续相同的程序 *)\n\tCASE state OF\n\t\t0 : (* 开始诊断操作 *)\n\t\t\t(* 关闭所有阀门并加压系统 *)\n\t\t\tQS := TRUE;\n\t\t\tQ0 := FALSE;\n\t\t\tQ1 := FALSE;\n\t\t\tQ2 := FALSE;\n\t\t\tQ3 := FALSE;\n\t\t\ttimer(in := TRUE, pt := TD_WAIT);\n\t\t\ttimer.IN := FALSE;\n\t\t\tstate := 1;\n\t\t1 : (* 等待TD_WAIT *)\n\t\t\ttimer();\n\t\t\tIF NOT timer.Q THEN\n\t\t\t\tQS := FALSE;\n\t\t\t\ttimer(in := TRUE, pt := TD_S);\n\t\t\t\ttimer.IN := FALSE;\n\t\t\t\tstate := 2;\n\t\t\tEND_IF;\n\t\t2: (* 等待安全阀压力测试 *)\n\t\t\ttimer();\n\t\t\tIF NOT timer.Q THEN\n\t\t\t\tIF NOT pr THEN\n\t\t\t\t\t(* 系统压力故障 *)\n\t\t\t\t\tERROR := TRUE;\n\t\t\t\t\tSTATUS := BYTE#1;\n\t\t\t\t\tRETURN;\n\t\t\t\tEND_IF;\n\t\t\t\ttimer(in := TRUE, pt := TD_0);\n\t\t\t\ttimer.IN := FALSE;\n\t\t\t\tQ0 := TRUE;\n\t\t\t\tstate := 3;\n\t\t\tEND_IF;\n\t\t3: (* 等待Q0上的压力保持TD_0 *)\n\t\t\ttimer();\n\t\t\tIF NOT timer.Q THEN\n\t\t\t\tIF NOT pr THEN\n\t\t\t\t\t(* 阀门0压力故障 *)\n\t\t\t\t\tERROR := TRUE;\n\t\t\t\t\tSTATUS := BYTE#1;\n\t\t\t\t\tRETURN;\n\t\t\t\tEND_IF;\n\t\t\t\tQ0 := FALSE;\n\t\t\t\tQS := TRUE;\n\t\t\tEND_IF;\n\tEND_CASE;\nELSIF ICE THEN\n\t(* 当有霜冻时，我们关闭安全阀并打开所有其他阀门以减压 *)\n\tQS := FALSE;\n\tQ0 := TRUE;\n\tQ1 := TRUE;\n\tQ2 := TRUE;\n\tQ3 := TRUE;\n\tSTATUS := BYTE#110;\n\nELSIF NOT error AND ENQ THEN\n\t\tQ0 := I0;\n\t\tQ1 := I1;\n\t\tQ2 := I2;\n\t\tQ3 := I3;\n\t\tQS := Q0 OR Q1 OR Q2 OR Q3;\n\t\tSTATUS := BYTE#100;\n\n\t\t(* 最大工作时间检查 *)\nELSE\n\tQ0 := FALSE;\n\tQ1 := FALSE;\n\tQ2 := FALSE;\n\tQ3 := FALSE;\nEND_IF;",
+    "description": "四阀门控制系统，集成安全阀管理、故障诊断和防冻保护功能。支持正常操作模式、诊断模式和防冻模式，提供完整的状态机和故障检测机制。适用于复杂工业流程控制、液压系统、气体分配系统等需要多阀门协调控制的应用。",
+    "inputs": [
+      {"name": "I0-I3", "type": "BOOL", "description": "四个阀门的输入控制信号"},
+      {"name": "PR", "type": "BOOL", "description": "压力检测信号"},
+      {"name": "ICE", "type": "BOOL", "description": "霜冻检测信号"},
+      {"name": "DIAG", "type": "BOOL", "description": "诊断模式使能"},
+      {"name": "ENQ", "type": "BOOL", "description": "系统使能信号"},
+      {"name": "RST", "type": "BOOL", "description": "系统复位信号"},
+      {"name": "TD_WAIT/TD_S/TD_0", "type": "TIME", "description": "各阶段定时时间设定"}
+    ],
+    "outputs": [
+      {"name": "QS", "type": "BOOL", "description": "安全阀输出控制"},
+      {"name": "Q0-Q3", "type": "BOOL", "description": "四个阀门输出控制"},
+      {"name": "ERROR", "type": "BOOL", "description": "系统故障指示"},
+      {"name": "STATUS", "type": "BYTE", "description": "系统状态代码"}
+    ],
+    "library_dependency": "OSCAT库: TP定时器功能块",
+    "iec_standard": "IEC 61131-3 复杂状态机，故障诊断逻辑",
+    "tags": ["多阀门控制", "安全联锁", "故障诊断", "状态机", "防冻保护", "压力检测"]
+  },
+  {
+    "instruction": "根据时间门控或脉冲测量来测量流量，用ST语言实现",
+    "input": "",
+    "output": "VAR_INPUT\n\tVX : REAL;\n\tE : BOOL;\n\tRST : BOOL;\n\tPULSE_MODE : BOOL;\n\tUPDATE_TIME : TIME := T#1s;\nEND_VAR\n\nVAR_OUTPUT\n\tF : REAL;\nEND_VAR\n\nVAR_IN_OUT\n\tX : REAL;\n\tY : UDINT;\nEND_VAR\n\nVAR\n\tT_PLC_MS : T_PLC_MS;\n\ttx : TIME;\n\ttl : TIME;\n\tint1 : INTEGRATE;\n\tinit : BOOL;\n\te_last : BOOL;\n\ttmp : INT;\n\tx_last : REAL;\n\ty_last : UDINT;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FLOW_METER\nIEC_LANGUAGE: ST\n*)\nIF NOT init THEN (* 开机初始化 *)\n\tinit := TRUE;\n\ttl := tx;\n\tx_last := X;\n\ty_last := Y;\n\tint1.K := 2.7777777777777777E-4;\nEND_IF;\n\n(* 运行积分器 *)\nint1(E := NOT (RST OR PULSE_MODE) AND E, X := VX, Y := X); (* 闭合操作 *)\nX := int1.Y;\n\nIF RST THEN (* 复位 *)\n\tX := 0.0;\n\tY := UDINT#0;\n\ttl := tx;\n\tx_last := 0.0;\n\ty_last := UDINT#0;\nELSIF E AND PULSE_MODE THEN (* 检查脉冲模式 *)\n\tIF NOT e_last THEN X := X + VX; END_IF;\nEND_IF;\ne_last := E;\n\n(* 将X减小至小于1并分别增加Y *)\nIF X > 1.0 THEN\n\ttmp := FLOOR(X);\n\tY := Y + _INT_TO_UDINT(tmp);\n\tX := X - INT_TO_REAL(tmp);\nEND_IF;\n\n(* 计算当前流量 *)\nT_PLC_MS();\ntx := UDINT_TO_TIME(T_PLC_MS.T_PLC_MS);\nIF tx - tl >= UPDATE_TIME AND UPDATE_TIME > t#0s THEN\n\tF := (UDINT_TO_REAL(Y - y_last) + X - x_last) / TIME_TO_REAL(tx - tl) * 3.6E6;\n\ty_last := Y;\n\tx_last := X;\n\ttl := tx;\nEND_IF;",
+    "description": "工业流量计功能块，支持时间门控和脉冲测量两种模式。采用积分算法计算累积流量，并通过时间差分计算瞬时流量。支持脉冲输入和连续测量，适用于液体、气体流量监测，工业过程控制中的流量计量等应用。",
+    "inputs": [
+      {"name": "VX", "type": "REAL", "description": "流量输入信号(体积/脉冲)"},
+      {"name": "E", "type": "BOOL", "description": "使能信号，启动流量测量"},
+      {"name": "RST", "type": "BOOL", "description": "复位信号，清零累积流量"},
+      {"name": "PULSE_MODE", "type": "BOOL", "description": "脉冲模式选择"},
+      {"name": "UPDATE_TIME", "type": "TIME", "description": "流量更新周期"}
+    ],
+    "outputs": [
+      {"name": "F", "type": "REAL", "description": "计算得到的流量值"}
+    ],
+    "library_dependency": "OSCAT库: T_PLC_MS系统时间, INTEGRATE积分器, FLOOR函数",
+    "iec_standard": "IEC 61131-3 流量计算算法，积分和时间处理",
+    "tags": ["流量测量", "脉冲计数", "积分算法", "工业仪表", "过程控制", "流量计量"]
+  },
+  {
+    "instruction": "使用st语言编程，返回实数的小数部分",
+    "input": "",
+    "output": "VAR_INPUT\n\tX : REAL;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FRACT\nIEC_LANGUAGE: ST\n*)\nIF ABS(x) < 2.0E9 THEN\n\tFRACT := x - DINT_TO_REAL(D_TRUNC(x));\nELSE\n\tFRACT := 0.0;\nEND_IF;",
+    "description": "实数小数部分提取函数，通过减去整数部分获得小数部分。包含数值范围检查，处理大数值时避免精度损失。适用于数学计算、坐标处理、数值分析等需要分离整数和小数部分的应用场景。",
+    "inputs": [
+      {"name": "X", "type": "REAL", "description": "输入的实数值"}
+    ],
+    "outputs": [
+      {"name": "FRACT", "type": "REAL", "description": "小数部分(0.0-0.999...)"}
+    ],
+    "library_dependency": "OSCAT库: D_TRUNC扩展截断函数",
+    "iec_standard": "IEC 61131-3 数学函数，数值分解操作",
+    "tags": ["小数部分", "数值分解", "数学函数", "坐标处理", "数值分析", "精度处理"]
+  },
+  {
+    "instruction": "用st语言实现一个带有时间限制和方向控制的斜坡计算器",
+    "input": "",
+    "output": "VAR_INPUT\n\tSTART : BYTE;\n\tDIR : BOOL;\n\tTD : TIME;\n\tTR : TIME;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FRMP_B\nIEC_LANGUAGE: ST\n*)\nIF TD < TR THEN\n\tFRMP_B := MIN(UDINT_TO_BYTE(DWORD_TO_UDINT(SHL(TIME_TO_DWORD(TD), 8)) / TIME_TO_UDINT(TR)), SEL(DIR, START, USINT_TO_BYTE(USINT#255 - BYTE_TO_USINT(START))));\n\tIF DIR THEN\n\t\tFRMP_B := USINT_TO_BYTE(BYTE_TO_USINT(START) + BYTE_TO_USINT(FRMP_B));\n\tELSE\n\t\tFRMP_B := USINT_TO_BYTE(BYTE_TO_USINT(START) - BYTE_TO_USINT(FRMP_B));\n\tEND_IF;\nELSE\n\tFRMP_B := SEL(DIR, BYTE#0, BYTE#255);\nEND_IF;",
+    "description": "字节类型斜坡函数发生器，支持上升/下降斜坡和时间比例控制。根据方向参数和斜坡时间计算当前输出值，实现平滑的数值过渡。适用于电机软启动、阀门渐进控制、亮度调节等需要平滑过渡的工业控制应用。",
+    "inputs": [
+      {"name": "START", "type": "BYTE", "description": "起始值"},
+      {"name": "DIR", "type": "BOOL", "description": "方向控制(0=下降,1=上升)"},
+      {"name": "TD", "type": "TIME", "description": "当前经过时间"},
+      {"name": "TR", "type": "TIME", "description": "斜坡总时间"}
+    ],
+    "outputs": [
+      {"name": "FRMP_B", "type": "BYTE", "description": "斜坡输出值"}
+    ],
+    "library_dependency": "OSCAT库: SEL选择函数, SHL移位函数",
+    "iec_standard": "IEC 61131-3 斜坡函数算法，时间比例控制",
+    "tags": ["斜坡函数", "软启动", "平滑过渡", "时间控制", "电机控制", "渐进控制"]
+  },
+  {
+    "instruction": "用st语言将不同格式的字符串转换为byte格式",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : oscat_STRING12;\nEND_VAR\n\nVAR_OUTPUT\n\tFSTRING_TO_BYTE : BYTE;\nEND_VAR\n\nVAR\n\tCLEAN : CLEAN;\n\tBIN_TO_BYTE : BIN_TO_BYTE;\n\tOCT_TO_BYTE : OCT_TO_BYTE;\n\tHEX_TO_BYTE : HEX_TO_BYTE;\n\ttmp : oscat_STRING3;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FSTRING_TO_BYTE\nIEC_LANGUAGE: ST\n*)\nIF LEN(IN)=0 THEN FSTRING_TO_BYTE := BYTE#0;RETURN;END_IF;\ntmp := LEFT(IN,MIN(2,LEN(IN)));\nIF EQ_STRING(tmp,'2#') THEN\n\t(* 我们需要转换为二进制 *)\n\tBIN_TO_BYTE(BIN:=RIGHT(in, LEN(in) - 2));\n\tFSTRING_TO_BYTE := BIN_TO_BYTE.BIN_TO_BYTE;\nELSIF EQ_STRING(tmp,'8#') THEN\n\t(* 我们需要转换为八进制 *)\n\tOCT_TO_BYTE(OCT:=RIGHT(in, LEN(in) - 2));\n\tFSTRING_TO_BYTE := OCT_TO_BYTE.OCT_TO_BYTE;\nELSE\n\ttmp := LEFT(IN,MIN(3,LEN(IN)));\n\tIF EQ_STRING(tmp,'16#') THEN\n\t\t(* 我们需要转换为十六进制 *)\n\t\tHEX_TO_BYTE(HEX:=RIGHT(in, LEN(in) - 3));\n\t\tFSTRING_TO_BYTE := HEX_TO_BYTE.HEX_TO_BYTE;\n\tELSE\n\t\t(* 我们假设是十进制表示 *)\n\t\tCLEAN(IN:=in,CX:='0123456789');\n\t\tFSTRING_TO_BYTE := STRING_TO_BYTE(CLEAN.CLEAN);\n\tEND_IF;\nEND_IF;",
+    "description": "多格式字符串到字节转换函数，支持二进制(2#)、八进制(8#)、十六进制(16#)和十进制格式。自动识别输入格式并进行相应转换，提供灵活的数据输入方式。适用于配置参数解析、通信数据处理、用户输入转换等应用场景。",
+    "inputs": [
+      {"name": "IN", "type": "oscat_STRING12", "description": "格式化的数字字符串"}
+    ],
+    "outputs": [
+      {"name": "FSTRING_TO_BYTE", "type": "BYTE", "description": "转换后的字节值"}
+    ],
+    "library_dependency": "OSCAT库: CLEAN, BIN_TO_BYTE, OCT_TO_BYTE, HEX_TO_BYTE函数",
+    "iec_standard": "IEC 61131-3 多进制转换，字符串解析",
+    "tags": ["多进制转换", "字符串解析", "二进制", "八进制", "十六进制", "数据输入"]
+  },
+  {
+    "instruction": "将给定字符串转换为DWORD整数值，给我st语言代码",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : oscat_STRING40;\nEND_VAR\n\nVAR_OUTPUT\n\tFSTRING_TO_DWORD : DWORD;\nEND_VAR\n\nVAR\n\tCLEAN : CLEAN;\n\tBIN_TO_DWORD : BIN_TO_DWORD;\n\tOCT_TO_DWORD : OCT_TO_DWORD;\n\tHEX_TO_DWORD : HEX_TO_DWORD;\n\ttmp : oscat_STRING3;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FSTRING_TO_DWORD\nIEC_LANGUAGE: ST\n*)\ntmp := LEFT(IN, 2);\nIF EQ_STRING(tmp,'2#') THEN\n\t(* 我们需要转换为二进制 *)\n\tBIN_TO_DWORD(BIN:=RIGHT(in, LEN(in) - 2));\n\tFSTRING_TO_DWORD := BIN_TO_DWORD.BIN_TO_DWORD;\nELSIF EQ_STRING(tmp,'8#') THEN\n\t(* 我们需要转换为八进制 *)\n\tOCT_TO_DWORD(OCT:=RIGHT(in, LEN(in) - 2));\n\tFSTRING_TO_DWORD := OCT_TO_DWORD.OCT_TO_DWORD;\nELSE\n\ttmp := LEFT(IN, 3);\n\tIF EQ_STRING(tmp,'16#') THEN\n\t\t(* 我们需要转换为十六进制 *)\n\t\tHEX_TO_DWORD(HEX:=RIGHT(in, LEN(in) - 3));\n\t\tFSTRING_TO_DWORD := HEX_TO_DWORD.HEX_TO_DWORD;\n\tELSE\n\t\t(* 我们假设是十进制表示 *)\n\t\tCLEAN(IN:=in,CX:='0123456789');\n\t\tFSTRING_TO_DWORD := STRING_TO_DWORD(CLEAN.CLEAN);\n\tEND_IF;\nEND_IF;",
+    "description": "多格式字符串到双字转换函数，支持大数值的多进制转换。处理二进制、八进制、十六进制和十进制格式，支持更大的数值范围。适用于配置大数值参数、内存地址解析、颜色值转换等需要32位数值的应用场景。",
+    "inputs": [
+      {"name": "IN", "type": "oscat_STRING40", "description": "格式化的数字字符串"}
+    ],
+    "outputs": [
+      {"name": "FSTRING_TO_DWORD", "type": "DWORD", "description": "转换后的双字值"}
+    ],
+    "library_dependency": "OSCAT库: CLEAN, BIN_TO_DWORD, OCT_TO_DWORD, HEX_TO_DWORD函数",
+    "iec_standard": "IEC 61131-3 大数值多进制转换，字符串处理",
+    "tags": ["双字转换", "大数值", "多进制", "内存地址", "颜色值", "配置参数"]
+  },
+  {
+    "instruction": "将不同格式的表示月份的字符转换为统一的数字表示，用st语言实现",
+    "input": "",
+    "output": "VAR_INPUT\n\tMTH : oscat_STRING20;\n\tLANG : INT;\nEND_VAR\n\nVAR_OUTPUT\n\tFSTRING_TO_MONTH : INT;\nEND_VAR\n\nVAR\n\tlx : INT;\n\tSETUP_MONTHS : SETUP_MONTHS;\n\tMONTHS : oscat_MONTHS;\n\tSETUP_MONTHS3 : SETUP_MONTHS3;\n\tMONTHS3 : oscat_MONTHS3;\n\tSETUP_LANGUAGE : SETUP_LANGUAGE;\n\tLANGUAGE : oscat_LANGUAGE;\n\tLOWERCASE : LOWERCASE;\n\tCAPITALIZE : CAPITALIZE;\n\tIS_NUM : IS_NUM;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FSTRING_TO_MONTH\nIEC_LANGUAGE: ST\n*)\nSETUP_MONTHS(MONTHS:=MONTHS);\nMONTHS:=SETUP_MONTHS.MONTHS;\nSETUP_MONTHS3(MONTHS3:=MONTHS3);\nMONTHS3:=SETUP_MONTHS3.MONTHS3;\nSETUP_LANGUAGE(LANGUAGE:=LANGUAGE);\nLANGUAGE:=SETUP_LANGUAGE.LANGUAGE;\n\nIF LANG = 0 THEN lx := LANGUAGE.DEFAULT; ELSE lx := MIN(LANG, LANGUAGE.LMAX); END_IF;\nLOWERCASE(str:=MTH);\nCAPITALIZE(str:=LOWERCASE.lowercase);\nMTH:=CAPITALIZE.CAPITALIZE;\n\nFOR FSTRING_TO_MONTH := 1 TO 12 DO\n\tIF EQ_STRING(MTH,MONTHS[lx][FSTRING_TO_MONTH]) THEN RETURN; END_IF;\n\tIF EQ_STRING(MTH,MONTHS3[lx][FSTRING_TO_MONTH]) THEN RETURN; END_IF;\nEND_FOR;\n\n(* 由于没有匹配的名称，尝试将其解码为整数 *)\nIS_NUM(str:=MTH);\nIF IS_NUM.IS_NUM THEN\n\tFSTRING_TO_MONTH := STRING_TO_INT(MTH);\nELSE\n\tFSTRING_TO_MONTH := 0;\nEND_IF;",
+    "description": "月份名称到数字转换函数，支持多语言和长短格式。能够识别英文月份全称、缩写，并支持数字输入作为备选。适用于国际化应用、日期解析、报表生成等需要处理月份文本表示的场景。",
+    "inputs": [
+      {"name": "MTH", "type": "oscat_STRING20", "description": "月份名称字符串"},
+      {"name": "LANG", "type": "INT", "description": "语言选择(0=默认)"}
+    ],
+    "outputs": [
+      {"name": "FSTRING_TO_MONTH", "type": "INT", "description": "月份数字(1-12,0=无效)"}
+    ],
+    "library_dependency": "OSCAT库: 月份和语言设置函数, LOWERCASE, CAPITALIZE, IS_NUM",
+    "iec_standard": "IEC 61131-3 字符串匹配和转换，国际化处理",
+    "tags": ["月份转换", "多语言", "日期解析", "国际化", "字符串匹配", "报表生成"]
+  },
+  {
+    "instruction": "以0代表周日，6代表周一，将一个星期内的每一天转换为对应数字表示，给出st语言代码",
+    "input": "",
+    "output": "VAR_INPUT\n\tWEEK : oscat_STRING60;\n\tLANG : INT;\nEND_VAR\n\nVAR_OUTPUT\n\tFSTRING_TO_WEEK : BYTE;\nEND_VAR\n\nVAR\n\tpos : INT;\n\tFSTRING_TO_WEEKDAY : FSTRING_TO_WEEKDAY;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FSTRING_TO_WEEK\nIEC_LANGUAGE: ST\n*)\npos := FIND(WEEK, ',');\nWHILE pos > 0 DO\n\tFSTRING_TO_WEEKDAY(WDAY:=MID(WEEK, pos - 1, 1),LANG:=LANG);\n\tFSTRING_TO_WEEK := FSTRING_TO_WEEK OR SHR_BYTE(BYTE#128, FSTRING_TO_WEEKDAY.FSTRING_TO_WEEKDAY);\n\tWEEK := RIGHT(WEEK, LEN(Week) - pos);\n\tpos := FIND(WEEK, ',');\nEND_WHILE;\n\nFSTRING_TO_WEEKDAY(WDAY:=WEEK,LANG:=LANG);\nFSTRING_TO_WEEK := (FSTRING_TO_WEEK OR SHR(BYTE#128, FSTRING_TO_WEEKDAY.FSTRING_TO_WEEKDAY)) AND BYTE#127;",
+    "description": "星期字符串到位编码的转换函数，将逗号分隔的星期名称转换为位掩码格式。每个位代表一个星期几，支持多星期组合。适用于调度系统、时间编程、周期性任务配置等需要处理星期组合的应用场景。",
+    "inputs": [
+      {"name": "WEEK", "type": "oscat_STRING60", "description": "逗号分隔的星期名称"},
+      {"name": "LANG", "type": "INT", "description": "语言选择参数"}
+    ],
+    "outputs": [
+      {"name": "FSTRING_TO_WEEK", "type": "BYTE", "description": "位编码的星期掩码"}
+    ],
+    "library_dependency": "OSCAT库: FIND, MID, RIGHT函数, FSTRING_TO_WEEKDAY",
+    "iec_standard": "IEC 61131-3 位操作和字符串处理，星期编码",
+    "tags": ["星期转换", "位编码", "调度系统", "时间编程", "周期性任务", "多星期组合"]
+  },
+  {
+    "instruction": "接收一个星期几的名称字符串和一个语言设置，将其转换为相应的整数值，代表星期几的顺序，给出st语言代码",
+    "input": "",
+    "output": "VAR_INPUT\n\tWDAY : oscat_STRING20;\n\tLANG : INT;\nEND_VAR\n\nVAR_OUTPUT\n\tFSTRING_TO_WEEKDAY : INT;\nEND_VAR\n\nVAR\n\ttmp : oscat_STRING2;\n\ti : INT;\n\tly : INT;\n\tTRIM : TRIM;\n\tSETUP_LANGUAGE : SETUP_LANGUAGE;\n\tLANGUAGE : oscat_LANGUAGE;\n\tSETUP_WEEKDAYS2 : SETUP_WEEKDAYS2;\n\tWEEKDAYS2 : oscat_WEEKDAYS2;\n\tLOWERCASE : LOWERCASE;\n\tCAPITALIZE : CAPITALIZE;\n\tDEC_TO_INT : DEC_TO_INT;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FSTRING_TO_WEEKDAY\nIEC_LANGUAGE: ST\n*)\nSETUP_WEEKDAYS2(WEEKDAYS2:=WEEKDAYS2);\nWEEKDAYS2:=SETUP_WEEKDAYS2.WEEKDAYS2;\nSETUP_LANGUAGE(LANGUAGE:=LANGUAGE);\nLANGUAGE:=SETUP_LANGUAGE.LANGUAGE;\n\nIF LANG = 0 THEN ly := LANGUAGE.DEFAULT; ELSE ly := MIN(LANG, LANGUAGE.LMAX); END_IF;\n(* tmp 需要先计算，否则 FIND 可能返回错误的值 *)\nTRIM(str:=WDAY);\nLOWERCASE(str:=TRIM.trim);\ntmp:=LOWERCASE.lowercase;\nCAPITALIZE(str:=LOWERCASE.lowercase);\ntmp:=CAPITALIZE.CAPITALIZE;\nFOR i := 1 TO 7 DO\n\tIF EQ_STRING(WEEKDAYS2[ly][i],tmp) THEN\n\t\tFSTRING_TO_WEEKDAY := i;\n\t\tRETURN;\n\tEND_IF;\nEND_FOR;\n\nDEC_TO_INT(DEC:=WDAY);\nFSTRING_TO_WEEKDAY:=DEC_TO_INT.DEC_TO_INT;",
+    "description": "星期名称到数字转换函数，支持多语言和多种格式识别。能够处理完整的星期名称，通过字符串匹配找到对应的星期序号。适用于用户界面、调度配置、日历处理等需要解析星期文本表示的应用。",
+    "inputs": [
+      {"name": "WDAY", "type": "oscat_STRING20", "description": "星期名称字符串"},
+      {"name": "LANG", "type": "INT", "description": "语言选择(0=默认语言)"}
+    ],
+    "outputs": [
+      {"name": "FSTRING_TO_WEEKDAY", "type": "INT", "description": "星期序号(1-7)"}
+    ],
+    "library_dependency": "OSCAT库: 星期和语言设置函数, TRIM, LOWERCASE, CAPITALIZE",
+    "iec_standard": "IEC 61131-3 字符串处理和匹配，多语言支持",
+    "tags": ["星期转换", "多语言支持", "字符串匹配", "用户界面", "调度配置", "日历处理"]
+  },
+  {
+    "instruction": "用st语言计算输入信号的移动平均值",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : REAL;\n\tE : BOOL := TRUE;\n\tN : INT := INT#32;\n\tRST : BOOL;\nEND_VAR\n\nVAR_OUTPUT\n\tAVG : REAL;\nEND_VAR\n\nVAR\n\tbuff : delay;\n\ti : INT;\n\tinit : BOOL;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FT_AVG\nIEC_LANGUAGE: ST\n*)\n(* 限制 N 的最大值为 32，因为延迟最大只能支持 32 次周期 *)\nbuff.N := LIMIT(0, N, 32);\n\nIF NOT init OR rst THEN\n\tFOR i := 1 TO N DO\n\t\tbuff(in := in);\n\tEND_FOR;\n\tavg := in;\n\tinit := TRUE;\nELSIF E THEN\n\tbuff(in := in);\n\tavg := avg + (in - buff.out ) / INT_TO_REAL(N);\nEND_IF;",
+    "description": "实时移动平均计算器，使用延迟缓冲器实现高效更新。限制最大32个样本以保持计算效率，采用增量更新算法避免重复计算。适用于实时信号平滑、趋势提取、噪声抑制等需要连续移动平均的应用场景。",
+    "inputs": [
+      {"name": "IN", "type": "REAL", "description": "输入信号"},
+      {"name": "E", "type": "BOOL", "description": "使能信号，控制计算"},
+      {"name": "N", "type": "INT", "description": "移动平均窗口大小(1-32)"},
+      {"name": "RST", "type": "BOOL", "description": "复位信号，重新初始化"}
+    ],
+    "outputs": [
+      {"name": "AVG", "type": "REAL", "description": "移动平均值"}
+    ],
+    "library_dependency": "OSCAT库: delay延迟功能块",
+    "iec_standard": "IEC 61131-3 移动平均算法，实时信号处理",
+    "tags": ["移动平均", "实时信号", "趋势提取", "噪声抑制", "信号平滑", "延迟缓冲"]
+  },
+  {
+    "instruction": "计算输入信号的导数，给出ST语言代码",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : REAL;\n\tK : REAL := 1.0;\n\tRUN : BOOL := TRUE;\nEND_VAR\n\nVAR_OUTPUT\n\tOUT : REAL;\nEND_VAR\n\nVAR\n\told : REAL;\n\ttx : UDINT;\n\tlast : UDINT;\n\tinit : BOOL;\n\ttc : REAL;\n\tT_PLC_US : T_PLC_US;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FT_DERIV\nIEC_LANGUAGE: ST\n*)\n(* 读取系统时间 *)\nT_PLC_US();\ntx:= T_PLC_US.T_PLC_MS;\ntc := UDINT_TO_REAL(tx - last);\n\n(* 首次启动时初始化 *)\nIF NOT init THEN\n\tinit := TRUE;\n\told := in;\nELSIF run AND tc > 0.0 THEN\n\tout := (in - old) / tc * 1000000.0 * K;\n\told := in;\nELSE\n\tout := 0.0;\nEND_IF;\n\nlast := tx;",
+    "description": "实时导数计算器，采用时间差分算法计算信号变化率。使用微秒级时间戳确保高精度时间测量，支持增益调节和运行控制。适用于速度计算、趋势检测、前馈控制等需要信号变化率的应用场景。",
+    "inputs": [
+      {"name": "IN", "type": "REAL", "description": "输入信号"},
+      {"name": "K", "type": "REAL", "description": "导数增益系数"},
+      {"name": "RUN", "type": "BOOL", "description": "运行控制信号"}
+    ],
+    "outputs": [
+      {"name": "OUT", "type": "REAL", "description": "导数输出(变化率)"}
+    ],
+    "library_dependency": "OSCAT库: T_PLC_US微秒时间函数",
+    "iec_standard": "IEC 61131-3 数值微分算法，高精度时间测量",
+    "tags": ["导数计算", "变化率", "速度检测", "趋势分析", "前馈控制", "时间微分"]
+  },
+  {
+    "instruction": "用st语言实现一个高通滤波器",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : REAL;\n\tT : TIME;\n\tK : REAL := 1.0;\nEND_VAR\n\nVAR_OUTPUT\n\tOUT : REAL;\nEND_VAR\n\nVAR\n\tt1 : FT_PT1;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FT_IMP\nIEC_LANGUAGE: ST\n*)\nT1(in:= in, T:=T);\nout := (in - t1.out) * K;",
+    "description": "一阶高通滤波器，通过减去低通滤波结果实现高频通过。有效抑制低频成分和直流分量，突出高频变化。适用于信号交流耦合、趋势去除、高频检测等需要抑制缓慢变化成分的应用场景。",
+    "inputs": [
+      {"name": "IN", "type": "REAL", "description": "输入信号"},
+      {"name": "T", "type": "TIME", "description": "滤波时间常数"},
+      {"name": "K", "type": "REAL", "description": "高通增益系数"}
+    ],
+    "outputs": [
+      {"name": "OUT", "type": "REAL", "description": "高通滤波输出"}
+    ],
+    "library_dependency": "OSCAT库: FT_PT1低通滤波器功能块",
+    "iec_standard": "IEC 61131-3 高通滤波算法，频域处理",
+    "tags": ["高通滤波", "交流耦合", "趋势去除", "高频检测", "信号处理", "频域滤波"]
+  },
+  {
+    "instruction": "计算输入信号的积分，给出ST语言代码",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : REAL;\n\tK : REAL := 1.0;\n\tRUN : BOOL := TRUE;\n\tRST : BOOL;\n\tOUT_MIN : REAL := REAL#-1.0E-37;\n\tOUT_MAX : REAL := REAL#1.0E37;\nEND_VAR\n\nVAR_OUTPUT\n\tOUT : REAL;\n\tLIM : BOOL;\nEND_VAR\n\nVAR\n\tINTEG : INTEGRATE;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FT_INT\nIEC_LANGUAGE: ST\n*)\nIF rst THEN\n\tout := 0.0;\nELSE\n\tinteg(X := IN, E := RUN, K := K, Y := out);\n\tout := integ.Y;\nEND_IF;\n\n(* 限制输出范围 *)\nIF out >= OUT_MAX THEN\n\tout := out_max;\n\tLIM := TRUE;\nELSIF out <= out_min THEN\n\tout := out_min;\n\tlim := TRUE;\nELSE\n\tlim := FALSE;\nEND_IF;",
+    "description": "实时积分器功能块，对输入信号进行时间积分运算。支持增益调节、运行控制和复位功能，包含输出限幅保护。适用于位置计算、累积量测量、PI控制器积分环节等需要信号积分的应用场景。",
+    "inputs": [
+      {"name": "IN", "type": "REAL", "description": "输入信号"},
+      {"name": "K", "type": "REAL", "description": "积分增益系数"},
+      {"name": "RUN", "type": "BOOL", "description": "积分运行控制"},
+      {"name": "RST", "type": "BOOL", "description": "积分器复位"},
+      {"name": "OUT_MIN/MAX", "type": "REAL", "description": "输出限制范围"}
+    ],
+    "outputs": [
+      {"name": "OUT", "type": "REAL", "description": "积分输出值"},
+      {"name": "LIM", "type": "BOOL", "description": "限幅状态指示"}
+    ],
+    "library_dependency": "OSCAT库: INTEGRATE积分器功能块",
+    "iec_standard": "IEC 61131-3 积分算法，限幅保护",
+    "tags": ["积分器", "累积计算", "位置积分", "PI控制", "限幅保护", "信号积分"]
+  },
+  {
+    "instruction": "用st语言实现一个带有双精度精度的积分器，用于对输入信号进行积分处理",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : REAL;\n\tK : REAL := 1.0;\n\tRUN : BOOL := TRUE;\n\tRST : BOOL;\n\tOUT_MIN : REAL := REAL#-1.0E-37;\n\tOUT_MAX : REAL := REAL#1.0E37;\nEND_VAR\n\nVAR_OUTPUT\n\tOUT : REAL;\n\tLIM : BOOL;\nEND_VAR\n\nVAR\n\tinteg : INTEGRATE;\n\tix : REAL;\n\tval : REAL2;\n\tR2_ADD : R2_ADD;\n\tR2_SET : R2_SET;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FT_INT2\nIEC_LANGUAGE: ST\n*)\nIF RST THEN\n\tR2_SET(X:=0.0);\n\tval:=R2_SET.R2_SET;\n\tout := 0.0;\nELSE\n\tinteg(X := IN, E := RUN, K := K, Y := ix);\n\tix := integ.Y;\n\tR2_ADD(X:=val,Y:=ix);\n\tval:=R2_ADD.R2_ADD;\n\tix := 0.0;\n\tOUT := val.RX;\nEND_IF;\n\n(* 检查输出是否超出限制 *)\nIF out > OUT_MIN AND out < OUT_MAX THEN\n\tLIM := FALSE;\nELSE\n\tOUT := LIMIT(OUT_MIN, OUT, OUT_MAX);\n\tR2_SET(X:=OUT);\n\tval:=R2_SET.R2_SET;\n\tLIM := TRUE;\nEND_IF;",
+    "description": "双精度积分器，使用REAL2高精度数据类型减少累积误差。适用于长时间积分、高精度位置控制、精密测量等需要高精度数值积分的应用场景。提供限幅保护和误差补偿功能。",
+    "inputs": [
+      {"name": "IN", "type": "REAL", "description": "输入信号"},
+      {"name": "K", "type": "REAL", "description": "积分增益系数"},
+      {"name": "RUN", "type": "BOOL", "description": "积分运行控制"},
+      {"name": "RST", "type": "BOOL", "description": "积分器复位"},
+      {"name": "OUT_MIN/MAX", "type": "REAL", "description": "输出限制范围"}
+    ],
+    "outputs": [
+      {"name": "OUT", "type": "REAL", "description": "高精度积分输出"},
+      {"name": "LIM", "type": "BOOL", "description": "限幅状态指示"}
+    ],
+    "library_dependency": "OSCAT库: INTEGRATE积分器, REAL2高精度类型, R2_ADD/R2_SET",
+    "iec_standard": "IEC 61131-3 高精度积分算法，误差补偿",
+    "tags": ["双精度积分", "高精度", "累积误差", "长时间积分", "精密控制", "误差补偿"]
+  },
+  {
+    "instruction": "用st语言编程，存储输入信号的最小值和最大值",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : REAL;\n\tRST : BOOL;\nEND_VAR\n\nVAR_OUTPUT\n\tMX : REAL;\n\tMN : REAL;\nEND_VAR\n\nVAR\n\tinit : BOOL;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FT_MIN_MAX\nIEC_LANGUAGE: ST\n*)\nIF (rst = TRUE) OR (init = FALSE) THEN\n\tmn := in;\n\tmx := in;\n\tinit := TRUE;\nELSIF (in < mn) THEN\n\tmn := in;\nELSIF (in > mx) THEN\n\tmx := in;\nEND_IF;",
+    "description": "信号极值记录器，自动跟踪和存储输入信号的最小值和最大值。支持复位功能重新记录极值。适用于过程监控、质量统计、设备性能分析等需要了解信号变化范围的应用场景。",
+    "inputs": [
+      {"name": "IN", "type": "REAL", "description": "输入信号"},
+      {"name": "RST", "type": "BOOL", "description": "复位信号，重新记录极值"}
+    ],
+    "outputs": [
+      {"name": "MX", "type": "REAL", "description": "记录的最大值"},
+      {"name": "MN", "type": "REAL", "description": "记录的最小值"}
+    ],
+    "library_dependency": "无特殊库依赖，使用标准IEC 61131-3功能",
+    "iec_standard": "IEC 61131-3 极值跟踪算法，状态保持",
+    "tags": ["极值记录", "最小值", "最大值", "过程监控", "质量统计", "范围跟踪"]
+  },
+  {
+    "instruction": "实现一个PD控制器，用于控制系统中的控制反馈环路，给出st语言代码",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : REAL;\n\tKP : REAL := 1.0;\n\tTV : REAL := 1.0;\nEND_VAR\n\nVAR_OUTPUT\n\tY : REAL;\nEND_VAR\n\nVAR\n\tdiff : FT_DERIV;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FT_PD\nIEC_LANGUAGE: ST\n*)\n(* 运行微分器 *)\ndiff(IN := IN, K := TV);\n\n(* 组合两个值 *)\nY := KP * (diff.out + IN);",
+    "description": "PD控制器实现，结合比例控制和微分控制。微分环节提供预测性控制，改善系统响应速度和稳定性。适用于需要快速响应和良好动态性能的位置控制、速度控制等工业应用。",
+    "inputs": [
+      {"name": "IN", "type": "REAL", "description": "控制偏差输入"},
+      {"name": "KP", "type": "REAL", "description": "比例增益系数"},
+      {"name": "TV", "type": "REAL", "description": "微分时间常数"}
+    ],
+    "outputs": [
+      {"name": "Y", "type": "REAL", "description": "PD控制器输出"}
+    ],
+    "library_dependency": "OSCAT库: FT_DERIV微分器功能块",
+    "iec_standard": "IEC 61131-3 PD控制算法，反馈控制",
+    "tags": ["PD控制", "比例微分", "预测控制", "动态性能", "位置控制", "速度控制"]
+  },
+  {
+    "instruction": "实现一个基于PD控制的一阶惯性系统，用st语言编程",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : REAL;\n\tKP : REAL := 1.0;\n\tTV : REAL := 1.0;\n\tT1 : REAL := 1.0;\nEND_VAR\n\nVAR_OUTPUT\n\tY : REAL;\nEND_VAR\n\nVAR\n\tdiff : FT_DERIV;\n\tTP : FT_PT1;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FT_PDT1\nIEC_LANGUAGE: ST\n*)\n(* 运行微分器 *)\ndiff(IN := IN, K := TV);\n\n(* 运行PT1滤波器 *)\ntp(in := diff.out, T := REAL_TO_TIME(T1));\n\n(* 组合两个值 *)\nY := KP * (tp.out + IN);",
+    "description": "PDT1控制器，结合PD控制和一阶惯性环节。模拟实际系统的惯性特性，适用于系统建模、控制器设计、过程仿真等需要同时考虑控制器动态特性和被控对象惯性的应用场景。",
+    "inputs": [
+      {"name": "IN", "type": "REAL", "description": "控制偏差输入"},
+      {"name": "KP", "type": "REAL", "description": "比例增益系数"},
+      {"name": "TV", "type": "REAL", "description": "微分时间常数"},
+      {"name": "T1", "type": "REAL", "description": "惯性时间常数"}
+    ],
+    "outputs": [
+      {"name": "Y", "type": "REAL", "description": "PDT1控制器输出"}
+    ],
+    "library_dependency": "OSCAT库: FT_DERIV微分器, FT_PT1低通滤波器",
+    "iec_standard": "IEC 61131-3 PDT1控制算法，系统建模",
+    "tags": ["PDT1控制", "惯性系统", "系统建模", "控制器设计", "过程仿真", "动态特性"]
+  },
+  {
+    "instruction": "实现一个基于PI控制的控制器，给出st代码",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : REAL;\n\tKP : REAL := 1.0;\n\tKI : REAL := 1.0;\n\tILIM_L : REAL := -1.0E38;\n\tILIM_H : REAL := 1.0E38;\n\tIEN : BOOL := TRUE;\n\tRST : BOOL := FALSE;\nEND_VAR\n\nVAR_OUTPUT\n\tY : REAL;\n\tLIM : BOOL;\nEND_VAR\n\nVAR\n\tinteg : FT_INT;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FT_PI\nIEC_LANGUAGE: ST\n*)\n(* 运行积分器 *)\ninteg(IN := IN, K := KI, RUN := IEN, RST := RST, OUT_MIN := ILIM_L, OUT_MAX := ILIM_H);\n\n(* 检查积分器是否达到极限并设置溢出标志 *)\nLIM := integ.LIM;\nY := KP * IN + integ.Out;",
+    "description": "PI控制器实现，结合比例控制和积分控制。积分环节消除稳态误差，提供无差控制。适用于需要精确控制、消除静差的速度控制、温度控制、压力控制等工业过程控制应用。",
+    "inputs": [
+      {"name": "IN", "type": "REAL", "description": "控制偏差输入"},
+      {"name": "KP", "type": "REAL", "description": "比例增益系数"},
+      {"name": "KI", "type": "REAL", "description": "积分增益系数"},
+      {"name": "ILIM_L/H", "type": "REAL", "description": "积分限幅范围"},
+      {"name": "IEN", "type": "BOOL", "description": "积分使能信号"},
+      {"name": "RST", "type": "BOOL", "description": "积分器复位"}
+    ],
+    "outputs": [
+      {"name": "Y", "type": "REAL", "description": "PI控制器输出"},
+      {"name": "LIM", "type": "BOOL", "description": "积分限幅状态"}
+    ],
+    "library_dependency": "OSCAT库: FT_INT积分器功能块",
+    "iec_standard": "IEC 61131-3 PI控制算法，无差控制",
+    "tags": ["PI控制", "比例积分", "无差控制", "稳态误差", "精确控制", "过程控制"]
+  },
+  {
+    "instruction": "实现一个基于PID控制的控制器，给出st代码",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : REAL;\n\tKP : REAL := 1.0;\n\tTN : REAL := 1.0;\n\tTV : REAL := 1.0;\n\tILIM_L : REAL := -1.0E38;\n\tILIM_H : REAL := 1.0E38;\n\tIEN : BOOL := TRUE;\n\tRST : BOOL := FALSE;\nEND_VAR\n\nVAR_OUTPUT\n\tY : REAL;\n\tLIM : BOOL;\nEND_VAR\n\nVAR\n\tinteg : FT_INT;\n\tdiff : FT_DERIV;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FT_PID\nIEC_LANGUAGE: ST\n*)\n(* 仅当TN > 0时运行积分器 *)\nIF TN > 0.0 THEN\n\tinteg(IN := IN, K := 1.0 / TN, RUN := IEN, RST := RST, OUT_MIN := ILIM_L, OUT_MAX := ILIM_H);\nELSE\n\tinteg(RST := FALSE);\nEND_IF;\n\n(* 运行微分器 *)\ndiff(IN := IN, K := TV);\n\n(* 组合两个值 *)\nY := KP * (integ.Out + diff.out + IN);\n\n(* 检查积分器是否达到极限并设置溢出标志 *)\nLIM := integ.LIM;",
+    "description": "完整PID控制器实现，结合比例、积分、微分三环节控制。提供积分限幅和复位功能，支持参数调节。适用于大多数工业过程控制场景，如温度控制、压力控制、流量控制、位置控制等。",
+    "inputs": [
+      {"name": "IN", "type": "REAL", "description": "控制偏差输入"},
+      {"name": "KP", "type": "REAL", "description": "比例增益系数"},
+      {"name": "TN", "type": "REAL", "description": "积分时间常数"},
+      {"name": "TV", "type": "REAL", "description": "微分时间常数"},
+      {"name": "ILIM_L/H", "type": "REAL", "description": "积分限幅范围"},
+      {"name": "IEN", "type": "BOOL", "description": "积分使能信号"},
+      {"name": "RST", "type": "BOOL", "description": "积分器复位"}
+    ],
+    "outputs": [
+      {"name": "Y", "type": "REAL", "description": "PID控制器输出"},
+      {"name": "LIM", "type": "BOOL", "description": "积分限幅状态"}
+    ],
+    "library_dependency": "OSCAT库: FT_INT积分器, FT_DERIV微分器",
+    "iec_standard": "IEC 61131-3 PID控制算法，工业标准",
+    "tags": ["PID控制", "比例积分微分", "工业标准", "过程控制", "参数调节", "反馈控制"]
+  },
+  {
+    "instruction": "用st语言实现带动态积分饱和的PID控制器",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : REAL;\n\tKP : REAL := 1.0;\n\tTN : REAL := 1.0;\n\tTV : REAL := 1.0;\n\tLIM_L : REAL := -1.0E38;\n\tLIM_H : REAL := 1.0E38;\n\tRST : BOOL := FALSE;\nEND_VAR\n\nVAR_OUTPUT\n\tY : REAL;\n\tLIM : BOOL;\nEND_VAR\n\nVAR\n\tinteg : INTEGRATE;\n\tdiff : FT_DERIV;\n\tYI : REAL;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FT_PIDW\nIEC_LANGUAGE: ST\n*)\n(* 运行积分器 *)\nIF tn = 0.0 OR rst THEN\n\tinteg(E := FALSE, Y := YI);\n\tYI := integ.Y;\n\tYI := 0.0;\nELSE\n\tinteg(X := IN, K := 1.0 / TN, E := NOT LIM, Y := YI);\n\tYI := integ.Y;\nEND_IF;\n\n(* 将积分器部分和线性部分相加 *)\nY := KP * (IN + YI);\n\n(* 运行微分器 *)\ndiff(IN := IN, K := TV);\n\n(* 在添加微分部分之前设置限值，以在必要时停止积分器 *)\nIF Y > LIM_L AND Y < LIM_H THEN\n\tLIM := FALSE;\nELSE\n\tLIM := TRUE;\nEND_IF;\n\n(* 添加微分部分并限制输出Y *)\nY := LIMIT(LIM_L, Y + KP * diff.out, LIM_H);",
+    "description": "带动态积分饱和的PID控制器，实现抗积分饱和功能。当输出达到限幅时自动停止积分，避免积分器饱和导致的性能下降。适用于存在大扰动、设定值频繁变化的工业控制场景。",
+    "inputs": [
+      {"name": "IN", "type": "REAL", "description": "控制偏差输入"},
+      {"name": "KP", "type": "REAL", "description": "比例增益系数"},
+      {"name": "TN", "type": "REAL", "description": "积分时间常数"},
+      {"name": "TV", "type": "REAL", "description": "微分时间常数"},
+      {"name": "LIM_L/H", "type": "REAL", "description": "输出限幅范围"},
+      {"name": "RST", "type": "BOOL", "description": "控制器复位"}
+    ],
+    "outputs": [
+      {"name": "Y", "type": "REAL", "description": "PID控制器输出"},
+      {"name": "LIM", "type": "BOOL", "description": "限幅状态指示"}
+    ],
+    "library_dependency": "OSCAT库: INTEGRATE积分器, FT_DERIV微分器",
+    "iec_standard": "IEC 61131-3 抗积分饱和PID算法",
+    "tags": ["抗积分饱和", "动态限幅", "大扰动", "设定值变化", "性能优化", "PID改进"]
+  },
+  {
+    "instruction": "实现带有动态风限复位的PID控制器，给出st代码",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : REAL;\n\tKP : REAL := 1.0;\n\tTN : REAL := 1.0;\n\tTV : REAL := 1.0;\n\tLIM_L : REAL := -1.0E38;\n\tLIM_H : REAL := 1.0E38;\n\tRST : BOOL;\nEND_VAR\n\nVAR_OUTPUT\n\tY : REAL;\n\tLIM : BOOL;\nEND_VAR\n\nVAR\n\tpiwl : FT_PIWL;\n\tdiff : FT_DERIV;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FT_PIDWL\nIEC_LANGUAGE: ST\n*)\n(* 如果rst为真 *)\nIF rst THEN\n\tpiwl(rst := TRUE);\n\tpiwl.RST := FALSE;\nELSE\n\t(* 先运行PIWL控制器 *)\n\t(* 我们需要检查TN是否为0，并进行替代调用 *)\n\tIF TN = 0.0 THEN\n\t\tpiwl(in := IN * KP, KP := 1.0, KI := 0.0, LIM_L := LIM_L, LIM_H := LIM_H);\n\tELSE\n\t\tpiwl(in := IN * KP, KP := 1.0, KI := 1.0 / TN, LIM_L := LIM_L, LIM_H := LIM_H);\n\tEND_IF;\n\n\t(* 运行微分器并将结果加到输出中 *)\ndiff(IN := IN, K := KP * TV);\nY := piwl.Y + diff.out;\n\n\t(* 限制输出 *)\n\tIF Y < LIM_L THEN\n\t\tLIM := TRUE;\n\t\tY := LIM_L;\n\tELSIF Y > LIM_H THEN\n\t\tLIM := TRUE;\n\t\tY := LIM_H;\n\tELSE\n\t\tLIM := FALSE;\n\tEND_IF;\nEND_IF;",
+    "description": "带有动态风限复位的PID控制器，结合抗积分饱和和微分先行技术。提供完整的PID功能同时避免积分饱和问题，适用于复杂工业过程控制，特别是需要频繁设定值变化或存在大扰动的应用场景。",
+    "inputs": [
+      {"name": "IN", "type": "REAL", "description": "控制偏差输入"},
+      {"name": "KP", "type": "REAL", "description": "比例增益系数"},
+      {"name": "TN", "type": "REAL", "description": "积分时间常数"},
+      {"name": "TV", "type": "REAL", "description": "微分时间常数"},
+      {"name": "LIM_L/H", "type": "REAL", "description": "输出限幅范围"},
+      {"name": "RST", "type": "BOOL", "description": "控制器复位"}
+    ],
+    "outputs": [
+      {"name": "Y", "type": "REAL", "description": "PID控制器输出"},
+      {"name": "LIM", "type": "BOOL", "description": "限幅状态指示"}
+    ],
+    "library_dependency": "OSCAT库: FT_PIWL抗饱和PI控制器, FT_DERIV微分器",
+    "iec_standard": "IEC 61131-3 改进型PID算法，抗饱和技术",
+    "tags": ["风限复位", "抗饱和PID", "微分先行", "复杂过程", "设定值跟踪", "改进控制"]
+  },
+  {
+    "instruction": "实现带有积分器的PI控制器，用st语言编程",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : REAL;\n\tKP : REAL := 1.0;\n\tKI : REAL := 1.0;\n\tLIM_L : REAL := -1.0E38;\n\tLIM_H : REAL := 1.0E38;\n\tRST : BOOL := FALSE;\nEND_VAR\n\nVAR_OUTPUT\n\tY : REAL;\n\tLIM : BOOL;\nEND_VAR\n\nVAR\n\tinteg : FT_INT;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FT_PIW\nIEC_LANGUAGE: ST\n*)\n(* 运行积分器 *)\ninteg(IN := IN, K := KI, RUN := NOT LIM, RST := RST);\n\n(* 设置输出值 *)\nY := KP * IN + integ.Out;\n\n(* 检查限制 *)\nIF Y < LIM_L THEN\n\tY := LIM_L;\n\tLIM := TRUE;\nELSIF Y > LIM_H THEN\n\tY := LIM_H;\n\tLIM := TRUE;\nELSE\n\tLIM := FALSE;\nEND_IF;",
+    "description": "带积分器的PI控制器，实现基本的抗积分饱和功能。当输出达到限幅时停止积分，提供稳定的控制性能。适用于一般的工业过程控制，特别是存在输出约束的控制场景。",
+    "inputs": [
+      {"name": "IN", "type": "REAL", "description": "控制偏差输入"},
+      {"name": "KP", "type": "REAL", "description": "比例增益系数"},
+      {"name": "KI", "type": "REAL", "description": "积分增益系数"},
+      {"name": "LIM_L/H", "type": "REAL", "description": "输出限幅范围"},
+      {"name": "RST", "type": "BOOL", "description": "积分器复位"}
+    ],
+    "outputs": [
+      {"name": "Y", "type": "REAL", "description": "PI控制器输出"},
+      {"name": "LIM", "type": "BOOL", "description": "限幅状态指示"}
+    ],
+    "library_dependency": "OSCAT库: FT_INT积分器功能块",
+    "iec_standard": "IEC 61131-3 基本抗饱和PI算法",
+    "tags": ["PI控制器", "抗饱和", "输出约束", "基本控制", "过程控制", "限幅控制"]
+  },
+  {
+    "instruction": "实现带有积分器和动态防风扰重置的PI控制器，用st语言编程",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : REAL;\n\tKP : REAL := 1.0;\n\tKI : REAL := 1.0;\n\tLIM_L : REAL := -1.0E38;\n\tLIM_H : REAL := 1.0E38;\n\tRST : BOOL;\nEND_VAR\n\nVAR_OUTPUT\n\tY : REAL;\n\tLIM : BOOL;\nEND_VAR\n\nVAR\n\tinit : BOOL;\n\ttx : UDINT;\n\ttc : REAL;\n\tt_last : UDINT;\n\tin_last : REAL;\n\ti : REAL;\n\tp : REAL;\n\tT_PLC_US : T_PLC_US;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FT_PIWL\nIEC_LANGUAGE: ST\n*)\n(* 启动时初始化 *)\nIF NOT init OR RST THEN\n\tinit := TRUE;\n\tin_last := in;\n\tT_PLC_US();\n\tt_last := T_PLC_US.T_PLC_US;\n\ti := 0.0;\n\ttc := 0.0;\nELSE\n\t(* 读取上次周期时间，单位为微秒 *)\n\tT_PLC_US();\n\ttx := T_PLC_US.T_PLC_MS;\n\ttc := UDINT_TO_REAL(tx - t_last);\n\tt_last := tx;\n\t(* 计算比例部分 *)\n\tp := KP * IN;\n\t(* 运行积分器 *)\n\ti := (IN + in_last) * 5.0E-7 * KI * tc + i;\n\tin_last := IN;\n\t(* 计算输出Y *)\n\tY := p + i;\n\t(* 检查输出是否超过限制 *)\n\tIF Y >= LIM_H THEN\n\t\tY := LIM_H;\n\t\tIF ki <> 0.0 THEN\n\t\t\ti := LIM_H - p;\n\t\tELSE\n\t\t\ti := 0.0;\n\t\tEND_IF;\n\t\tLIM := TRUE;\n\tELSIF Y <= LIM_L THEN\n\t\tY := LIM_L;\n\t\tIF ki <> 0.0 THEN\n\t\t\ti := LIM_L - p;\n\t\tELSE\n\t\t\ti := 0.0;\n\t\tEND_IF;\n\t\tLIM := TRUE;\n\tELSE\n\t\tLIM := FALSE;\n\tEND_IF;\nEND_IF;",
+    "description": "带动态风限复位的PI控制器，实现先进的抗积分饱和算法。当输出受限时动态调整积分值，提供优异的控制性能。适用于大扰动、频繁设定值变化等复杂工业控制场景。",
+    "inputs": [
+      {"name": "IN", "type": "REAL", "description": "控制偏差输入"},
+      {"name": "KP", "type": "REAL", "description": "比例增益系数"},
+      {"name": "KI", "type": "REAL", "description": "积分增益系数"},
+      {"name": "LIM_L/H", "type": "REAL", "description": "输出限幅范围"},
+      {"name": "RST", "type": "BOOL", "description": "控制器复位"}
+    ],
+    "outputs": [
+      {"name": "Y", "type": "REAL", "description": "PI控制器输出"},
+      {"name": "LIM", "type": "BOOL", "description": "限幅状态指示"}
+    ],
+    "library_dependency": "OSCAT库: T_PLC_US高精度时间函数",
+    "iec_standard": "IEC 61131-3 先进抗饱和PI算法，动态风限复位",
+    "tags": ["风限复位", "动态抗饱和", "先进PI", "复杂控制", "大扰动", "性能优化"]
+  },
+  {
+    "instruction": "用st语言实现一个低通滤波器，具有可编程的时间常数T和增益因子K",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : REAL;\n\tT : TIME;\n\tK : REAL := 1.0;\nEND_VAR\n\nVAR_OUTPUT\n\tOUT : REAL;\nEND_VAR\n\nVAR\n\tlast : UDINT;\n\ttx : UDINT;\n\tinit : BOOL;\n\tT_PLC_US : T_PLC_US;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FT_PT1\nIEC_LANGUAGE: ST\n*)\n(* 读取系统时间 *)\nT_PLC_US();\n\ttx:= T_PLC_US.T_PLC_MS;\n\n(* 启动初始化 *)\nIF NOT init OR T = t#0s THEN\n\tinit := TRUE;\n\tout := K * in;\nELSE\n\tout := out + (in * K - out) * UDINT_TO_REAL(Tx - last) / TIME_TO_REAL(T) * 1.0E-3;\n\tIF ABS(out) < 1.0E-20 THEN out := 0.0; END_IF;\nEND_IF;\nlast := tx;",
+    "description": "一阶低通滤波器，支持可编程时间常数和增益因子。采用高精度时间戳实现精确的滤波计算，提供增益调节和零漂抑制。适用于信号平滑、噪声抑制、动态补偿等需要可编程滤波特性的应用场景。",
+    "inputs": [
+      {"name": "IN", "type": "REAL", "description": "输入信号"},
+      {"name": "T", "type": "TIME", "description": "滤波时间常数"},
+      {"name": "K", "type": "REAL", "description": "增益因子"}
+    ],
+    "outputs": [
+      {"name": "OUT", "type": "REAL", "description": "滤波输出信号"}
+    ],
+    "library_dependency": "OSCAT库: T_PLC_US高精度时间函数",
+    "iec_standard": "IEC 61131-3 一阶滤波算法，高精度实现",
+    "tags": ["低通滤波", "时间常数", "增益调节", "信号平滑", "噪声抑制", "高精度滤波"]
+  },
+  {
+    "instruction": "用st语言实现一个二阶滤波器，具有可编程的时间常数T、阻尼系数D和增益因子K",
+    "input": "",
+    "output": "VAR_INPUT\n\tIN : REAL;\n\tT : TIME;\n\tD : REAL;\n\tK : REAL := 1.0;\nEND_VAR\n\nVAR_OUTPUT\n\tOUT : REAL;\nEND_VAR\n\nVAR\n\tinit : BOOL;\n\tint1 : INTEGRATE;\n\tint2 : INTEGRATE;\n\ttn : REAL;\n\tI1 : REAL;\n\tI2 : REAL;\n\ttn2 : REAL;\nEND_VAR\n\n(*@KEY@: WORKSHEET\nNAME: FT_PT2\nIEC_LANGUAGE: ST\n*)\n(* 启动初始化 *)\nIF NOT init OR T = T#0s THEN\n\tinit := TRUE;\n\tout := K * in;\n\tI2 := out;\nELSE\n\tTN := TIME_TO_REAL(T) / 1000.0;\n\ttn2 := TN * TN;\n\tint1(X := in * K / tn2 - I1 * 0.5 * D / TN - I2 / TN2, Y := I1);\n\tI1 := int1.Y;\n\tint2(X := I1,Y := I2);\n\tI2 := int2.Y;\n\tout := I2;\nEND_IF;",
+    "description": "二阶滤波器，支持阻尼系数调节实现不同的滤波特性。通过两个积分器级联实现二阶动态响应，可配置为低通、带通或高通特性。适用于需要特定频率响应的滤波应用，如谐振抑制、带通滤波、动态补偿等。",
+    "inputs": [
+      {"name": "IN", "type": "REAL", "description": "输入信号"},
+      {"name": "T", "type": "TIME", "description": "时间常数"},
+      {"name": "D", "type": "REAL", "description": "阻尼系数"},
+      {"name": "K", "type": "REAL", "description": "增益因子"}
+    ],
+    "outputs": [
+      {"name": "OUT", "type": "REAL", "description": "二阶滤波输出"}
+    ],
+    "library_dependency": "OSCAT库: INTEGRATE积分器功能块",
+    "iec_standard": "IEC 61131-3 二阶滤波算法，阻尼控制",
+    "tags": ["二阶滤波", "阻尼系数", "频率响应", "谐振抑制", "带通滤波", "动态补偿"]
+  }
+]
