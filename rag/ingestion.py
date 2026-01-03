@@ -66,7 +66,8 @@ def read_pdf_documents(books_dir: Path, chunk_size: int, overlap: int) -> List[D
             if not pages_text:
                 continue
             full_text = "\n".join(pages_text)
-            for idx, chunk in enumerate(chunk_text(full_text, chunk_size=chunk_size, overlap=overlap)):
+            chunks = chunk_text(full_text, chunk_size=chunk_size, overlap=overlap)
+            for idx, chunk in enumerate(chunks):
                 documents.append(
                     Document(
                         doc_id=f"{pdf_path.stem}-{idx}",
@@ -74,6 +75,7 @@ def read_pdf_documents(books_dir: Path, chunk_size: int, overlap: int) -> List[D
                         metadata={"source": "book", "file": pdf_path.name, "chunk_id": idx},
                     )
                 )
+            logger.info("book: %s get chunks: %d",pdf_path,len(chunks))
         except Exception as exc:  # noqa: BLE001
             logger.warning("Failed to read %s: %s", pdf_path, exc)
     return documents

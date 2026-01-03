@@ -1,7 +1,12 @@
-torch==2.3.1
+# 建议修改 torch 以匹配 vllm 0.4.3
+torch==2.3.0 --index-url https://download.pytorch.org/whl/cu121
+# 或者保持 torch 2.3.1，将 vllm 升级到 0.5.0
+# vllm==0.5.0
+
 transformers==4.40.2
 sentence-transformers==2.7.0
-faiss-gpu==1.7.4
+# 建议使用特定 CUDA 版本的 faiss
+faiss-gpu-cu12>=1.8.0
 pypdf==4.1.0
 numpy==1.26.4
 pyyaml==6.0.1
