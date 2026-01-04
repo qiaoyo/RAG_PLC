@@ -6,4 +6,3 @@
 /rag/artifacts
 *.pyc
 *.zip
-normalize_train_full.py
