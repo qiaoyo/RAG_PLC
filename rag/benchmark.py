@@ -3,12 +3,12 @@ import json
 import logging
 from pathlib import Path
 
-from .data_models import PLCExample
-from .evaluation import BenchmarkRunner, LLMJudge
-from .ingestion import load_plc_dataset
-from .pipeline import RAGPipeline
-from .retriever import Retriever
-from .settings import (
+from data_models import PLCExample
+from evaluation import BenchmarkRunner, LLMJudge
+from ingestion import load_plc_dataset
+from pipeline import RAGPipeline
+from retriever import Retriever
+from settings import (
     DATASET_PATH,
     DEFAULT_EMBED_MODEL,
     DEFAULT_GEN_MODEL,
@@ -17,9 +17,9 @@ from .settings import (
     INDEX_PATH,
     METADATA_PATH,
 )
-from .embedding import Embedder
-from .vector_store import FaissStore
-from .generator import LLMGenerator
+from embedding import Embedder
+from vector_store import FaissStore
+from generator import LLMGenerator
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")

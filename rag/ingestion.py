@@ -7,17 +7,17 @@ from typing import List
 from pypdf import PdfReader
 from tqdm import tqdm
 
-from .data_models import Document, PLCExample
-from .embedding import Embedder
-from .settings import (
+from data_models import Document, PLCExample
+from embedding import Embedder
+from settings import (
     BOOKS_DIR,
     DATASET_PATH,
     DEFAULT_EMBED_MODEL,
     INDEX_PATH,
     METADATA_PATH,
 )
-from .utils import chunk_text, ensure_dir
-from .vector_store import FaissStore
+from utils import chunk_text, ensure_dir
+from vector_store import FaissStore
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -56,6 +56,7 @@ def dataset_to_documents(dataset: List[PLCExample]) -> List[Document]:
 def read_pdf_documents(books_dir: Path, chunk_size: int, overlap: int) -> List[Document]:
     documents: List[Document] = []
     for pdf_path in sorted(books_dir.glob("*.pdf")):
+        print(f"Processing book: {pdf_path.name}")
         try:
             reader = PdfReader(pdf_path)
             pages_text = []

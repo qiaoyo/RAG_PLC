@@ -3,18 +3,18 @@ import logging
 from pathlib import Path
 from typing import Dict, List
 
-from .generator import LLMGenerator
-from .retriever import Retriever
-from .settings import (
+from generator import LLMGenerator
+from retriever import Retriever
+from settings import (
     DEFAULT_EMBED_MODEL,
     DEFAULT_GEN_MODEL,
     DEFAULT_TOKENIZER_PATH,
     INDEX_PATH,
     METADATA_PATH,
 )
-from .utils import extract_code_block
-from .vector_store import FaissStore
-from .embedding import Embedder
+from utils import extract_code_block
+from vector_store import FaissStore
+from embedding import Embedder
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")

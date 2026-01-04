@@ -7,11 +7,11 @@ from typing import Dict, List, Optional
 
 from tqdm import tqdm
 
-from .data_models import PLCExample
-from .generator import LLMGenerator
-from .pipeline import RAGPipeline
-from .settings import DEFAULT_JUDGE_MODEL
-from .utils import extract_code_block, extract_first_json
+from data_models import PLCExample
+from generator import LLMGenerator
+from pipeline import RAGPipeline
+from settings import DEFAULT_JUDGE_MODEL
+from utils import extract_code_block, extract_first_json
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")

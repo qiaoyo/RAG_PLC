@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Tuple
 import faiss
 import numpy as np
 
-from .utils import ensure_dir, flatten_metadata_items
+from utils import ensure_dir, flatten_metadata_items
 
 
 class FaissStore:

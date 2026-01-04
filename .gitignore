@@ -3,4 +3,6 @@
 /books_2
 /code
 /data/data_full
+/rag/artifacts
+*.pyc
 *.zip
