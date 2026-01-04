@@ -14,10 +14,10 @@ from transformers import (
 )
 from peft import LoraConfig, get_peft_model
 
-from .data_models import PLCExample
-from .ingestion import load_plc_dataset
-from .pipeline import SYSTEM_PROMPT
-from .settings import DATASET_PATH, DEFAULT_GEN_MODEL, DEFAULT_TOKENIZER_PATH
+from data_models import PLCExample
+from ingestion import load_plc_dataset
+from pipeline import SYSTEM_PROMPT
+from settings import DATASET_PATH, DEFAULT_GEN_MODEL, DEFAULT_TOKENIZER_PATH
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")

@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
-from .embedding import Embedder
-from .vector_store import FaissStore
+from embedding import Embedder
+from vector_store import FaissStore
 
 
 class Retriever:
