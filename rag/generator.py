@@ -1,9 +1,9 @@
 import importlib
 import logging
-from typing import Optional
+from typing import Optional, Union
 
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline
+from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, pipeline
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +18,9 @@ class LLMGenerator:
         tensor_parallel_size: int = 1,
         max_model_len: int = 32768,
         trust_remote_code: bool = True,
+        device: Optional[Union[str, int]] = None,
+        load_in_8bit: bool = False,
+        load_in_4bit: bool = False,
     ):
         self.model_name_or_path = model_name_or_path
         self.tokenizer_path = tokenizer_path or model_name_or_path
@@ -25,6 +28,9 @@ class LLMGenerator:
         self.tensor_parallel_size = tensor_parallel_size
         self.max_model_len = max_model_len
         self.generator = None
+        self.device = device
+        self.load_in_8bit = load_in_8bit
+        self.load_in_4bit = load_in_4bit
         self.use_vllm = provider == "vllm" and importlib.util.find_spec("vllm") is not None
 
         if self.use_vllm:
@@ -46,17 +52,33 @@ class LLMGenerator:
             )
             if self.tokenizer.pad_token is None:
                 self.tokenizer.pad_token = self.tokenizer.eos_token
+            device_map = device if device is not None else "auto"
+            quant_config = None
+            if load_in_8bit and load_in_4bit:
+                raise ValueError("Only one of load_in_8bit or load_in_4bit can be True")
+            if load_in_8bit:
+                quant_config = BitsAndBytesConfig(load_in_8bit=True)
+                dtype = None
+            elif load_in_4bit:
+                quant_config = BitsAndBytesConfig(
+                    load_in_4bit=True,
+                    bnb_4bit_compute_dtype=torch.float16,
+                    bnb_4bit_quant_type="nf4",
+                    bnb_4bit_use_double_quant=True,
+                )
+                dtype = None
             self.model = AutoModelForCausalLM.from_pretrained(
                 model_name_or_path,
-                device_map="auto",
+                device_map=device_map,
                 torch_dtype=dtype,
                 trust_remote_code=trust_remote_code,
+                quantization_config=quant_config,
             )
             self.generator = pipeline(
                 task="text-generation",
                 model=self.model,
                 tokenizer=self.tokenizer,
-                device_map="auto",
+                device_map=device_map,
             )
 
     def generate(

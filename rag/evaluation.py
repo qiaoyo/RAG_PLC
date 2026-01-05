@@ -38,8 +38,22 @@ EVAL_PROMPT = """你是PLC代码评测专家。请对比候选代码与参考代
 
 
 class LLMJudge:
-    def __init__(self, model_name: str = DEFAULT_JUDGE_MODEL, tokenizer_path: Optional[str] = None):
-        self.generator = LLMGenerator(model_name_or_path=model_name, tokenizer_path=tokenizer_path, provider="hf")
+    def __init__(
+        self,
+        model_name: str = DEFAULT_JUDGE_MODEL,
+        tokenizer_path: Optional[str] = None,
+        device: Optional[str | int] = None,
+        load_in_8bit: bool = False,
+        load_in_4bit: bool = False,
+    ):
+        self.generator = LLMGenerator(
+            model_name_or_path=model_name,
+            tokenizer_path=tokenizer_path,
+            provider="hf",
+            device=device,
+            load_in_8bit=load_in_8bit,
+            load_in_4bit=load_in_4bit,
+        )
 
     def score(self, example: PLCExample, candidate_code: str) -> Dict:
         prompt = EVAL_PROMPT.format(
