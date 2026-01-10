@@ -38,8 +38,27 @@ EVAL_PROMPT = """你是PLC代码评测专家。请对比候选代码与参考代
 
 
 class LLMJudge:
-    def __init__(self, model_name: str = DEFAULT_JUDGE_MODEL, tokenizer_path: Optional[str] = None):
-        self.generator = LLMGenerator(model_name_or_path=model_name, tokenizer_path=tokenizer_path, provider="hf")
+    def __init__(
+        self,
+        model_name: str = DEFAULT_JUDGE_MODEL,
+        tokenizer_path: Optional[str] = None,
+        device: Optional[str | int] = None,
+        load_in_8bit: bool = False,
+        load_in_4bit: bool = False,
+        provider: str = "hf",
+        tensor_parallel_size: int = 1,
+        max_model_len: int = 8192,
+    ):
+        self.generator = LLMGenerator(
+            model_name_or_path=model_name,
+            tokenizer_path=tokenizer_path,
+            provider=provider,
+            device=device,
+            load_in_8bit=load_in_8bit,
+            load_in_4bit=load_in_4bit,
+            tensor_parallel_size=tensor_parallel_size,
+            max_model_len=max_model_len,
+        )
 
     def score(self, example: PLCExample, candidate_code: str) -> Dict:
         prompt = EVAL_PROMPT.format(
@@ -55,6 +74,56 @@ class LLMJudge:
         reason = parsed.get("reason", raw.strip())
         return {"score": score, "pass": passed, "reason": reason, "raw": raw}
 
+    def score_raw(
+        self,
+        reference_code: str,
+        candidate_code: str,
+        instruction: str = "",
+        user_input: str = "",
+    ) -> Dict:
+        prompt = EVAL_PROMPT.format(
+            instruction=instruction or "未提供指令",
+            user_input=user_input or "无",
+            reference_code=reference_code,
+            candidate_code=candidate_code,
+        )
+        raw = self.generator.generate(prompt, max_new_tokens=256, temperature=0.0)
+        parsed = extract_first_json(raw)
+        score = float(parsed.get("score", 0.0))
+        passed = bool(parsed.get("pass", score >= 0.6))
+        reason = parsed.get("reason", raw.strip())
+        return {"score": score, "pass": passed, "reason": reason, "raw": raw}
+
+    def score_batch(self, items: List[Dict]) -> List[Dict]:
+        prompts = [
+            EVAL_PROMPT.format(
+                instruction=item["example"].instruction,
+                user_input=item["example"].input or "无",
+                reference_code=item["example"].output,
+                candidate_code=item["candidate_code"],
+            )
+            for item in items
+        ]
+        raw_outputs = self.generator.generate(prompts, max_new_tokens=256, temperature=0.0)
+        results: List[Dict] = []
+        for item, raw in zip(items, raw_outputs):
+            parsed = extract_first_json(raw)
+            score = float(parsed.get("score", 0.0))
+            passed = bool(parsed.get("pass", score >= 0.6))
+            reason = parsed.get("reason", raw.strip())
+            results.append(
+                {
+                    "instruction": item["example"].instruction,
+                    "input": item["example"].input,
+                    "reference": item["example"].output,
+                    "candidate": item["candidate_code"],
+                    "score": score,
+                    "pass": passed,
+                    "reason": reason,
+                }
+            )
+        return results
+
 
 class BenchmarkRunner:
     def __init__(self, pipeline: RAGPipeline, judge: LLMJudge, dataset: List[PLCExample]):
@@ -62,24 +131,19 @@ class BenchmarkRunner:
         self.judge = judge
         self.dataset = dataset
 
-    def run(self, limit: Optional[int] = None) -> Dict:
+    def run(self, limit: Optional[int] = None, batch_size: int = 4) -> Dict:
         results: List[Dict] = []
         subset = self.dataset[:limit] if limit else self.dataset
+        buffer: List[Dict] = []
         for example in tqdm(subset, desc="Benchmarking"):
             generated = self.pipeline.generate(example.instruction, example.input)
             candidate_code = extract_code_block(generated["raw_output"])
-            judgment = self.judge.score(example, candidate_code)
-            results.append(
-                {
-                    "instruction": example.instruction,
-                    "input": example.input,
-                    "reference": example.output,
-                    "candidate": candidate_code,
-                    "score": judgment["score"],
-                    "pass": judgment["pass"],
-                    "reason": judgment["reason"],
-                }
-            )
+            buffer.append({"example": example, "candidate_code": candidate_code})
+            if len(buffer) >= batch_size:
+                results.extend(self.judge.score_batch(buffer))
+                buffer = []
+        if buffer:
+            results.extend(self.judge.score_batch(buffer))
         scores = [item["score"] for item in results]
         mean_score = statistics.mean(scores) if scores else 0.0
         pass_rate = sum(1 for s in results if s["pass"]) / len(results) if results else 0.0

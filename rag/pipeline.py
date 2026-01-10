@@ -88,3 +88,6 @@ if __name__ == "__main__":
     pipeline = build_pipeline(args)
     result = pipeline.generate(instruction=args.query, user_input=args.input)
     logger.info("生成代码:\n%s", result["code"])
+    output_path = Path("test.st")
+    output_path.write_text(result["code"], encoding="utf-8")
+    logger.info("已保存代码到 %s", output_path.resolve())

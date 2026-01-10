@@ -45,6 +45,19 @@
      --output rag/artifacts/qwen7b-plc-lora --lr 1e-4 --epochs 2
    ```
 
+## 全量 677 条基准评测（自动脚本）
+运行 `rag/run_full_benchmark.sh`（可在脚本顶部或环境变量覆盖模型路径），默认：
+- 数据集：`data/data_full/train_full_normalized.json`
+- 构建索引到 `rag/artifacts/full_faiss.index`
+- 生成/判分模型：GEN 默认 `Qwen2.5-Coder-14B-Instruct`，JUDGE 默认 `Qwen2.5-7B-Instruct`
+- HF + bitsandbytes 8bit，判分批量 8，`max_len=2048`
+```bash
+cd /home/qiaoyo/python_proj/PLC_RAG/PLC_RAG
+GEN_MODEL=/path/to/gen JUDGE_MODEL=/path/to/judge TOKENIZER=/path/to/tokenizer \
+  ./rag/run_full_benchmark.sh
+```
+结果写入 `rag/artifacts/full_benchmark_results.json`。
+
 ## 设计要点
 - 检索：PDF 章节与已整理的 PLC 代码/描述一起构建向量库（支持 GPU FAISS）。  
 - 生成：默认 HuggingFace `transformers`，可切换 `vllm` 提升吞吐。  
