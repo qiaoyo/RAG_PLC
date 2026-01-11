@@ -1,0 +1,32 @@
+VAR_INPUT
+	STR : STRING;
+END_VAR
+
+VAR_OUTPUT
+	CAPITALIZE : STRING;
+END_VAR
+
+VAR
+	char : BYTE;
+	char2 : BYTE;
+	pos : INT;
+	L : INT;
+	first : BOOL;
+	str_temp : STRING;
+END_VAR
+
+CAPITALIZE := STR;
+first := TRUE;
+L := LEN(STR);
+FOR pos := 1 TO L DO
+	char := INT_TO_BYTE(GET_CHAR(STR, pos));
+	IF first THEN
+		char2 := TO_UPPER(char);
+		IF char <> char2 THEN
+			str_temp := CAPITALIZE;
+			CAPITALIZE := REPLACE(str_temp, BYTE_TO_STRING(char2, '%c'), 1, pos);
+		END_IF;
+	END_IF;
+	(* 记住下一个字符是否需要大写 *)
+	first := char = BYTE#32;
+END_FOR;

@@ -1,0 +1,45 @@
+```st
+VAR_INPUT
+    WEEK : oscat_STRING60;
+    LANG : INT;
+END_VAR
+
+VAR_OUTPUT
+    FSTRING_TO_WEEK : BYTE;
+END_VAR
+
+VAR
+    pos : INT;
+    day : INT;
+    day_str : oscat_STRING20;
+    FSTRING_TO_WEEKDAY : INT;
+END_VAR
+
+(*@KEY@: WORKSHEET
+NAME: FSTRING_TO_WEEK
+IEC_LANGUAGE: ST
+*)
+
+(* Initialize output *)
+FSTRING_TO_WEEK := BYTE#0;
+
+(* Process each day in the input string *)
+pos := FIND(WEEK, ',');
+WHILE pos > 0 DO
+    day_str := MID(WEEK, 1, pos - 1);
+    FSTRING_TO_WEEKDAY(day_str, LANG);
+    IF FSTRING_TO_WEEKDAY >= 0 AND FSTRING_TO_WEEKDAY <= 6 THEN
+        day := FSTRING_TO_WEEKDAY;
+        FSTRING_TO_WEEK := FSTRING_TO_WEEK OR SHL_BYTE(BYTE#1, day);
+    END_IF;
+    WEEK := RIGHT(WEEK, LEN(WEEK) - pos - 1);
+    pos := FIND(WEEK, ',');
+END_WHILE;
+
+(* Process the last day in the input string *)
+FSTRING_TO_WEEKDAY(WEEK, LANG);
+IF FSTRING_TO_WEEKDAY >= 0 AND FSTRING_TO_WEEKDAY <= 6 THEN
+    day := FSTRING_TO_WEEKDAY;
+    FSTRING_TO_WEEK := FSTRING_TO_WEEK OR SHL_BYTE(BYTE#1, day);
+END_IF;
+```

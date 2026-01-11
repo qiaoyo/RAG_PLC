@@ -1,0 +1,30 @@
+VAR
+    formatString : STRING;
+    param1 : STRING;
+    param2 : STRING;
+    resultString : STRING;
+    pos : INT;
+    tempString : STRING;
+END_VAR
+
+resultString := formatString;
+
+pos := FIND(resultString, '%s');
+WHILE pos > 0 DO
+    IF pos > 0 THEN
+        tempString := COPY(resultString, 1, pos - 1);
+        resultString := CONCAT(tempString, param1);
+        resultString := CONCAT(resultString, COPY(resultString, pos + 2, LEN(resultString)));
+        pos := FIND(resultString, '%s', pos + LEN(param1));
+    END_IF;
+END_WHILE;
+
+pos := FIND(resultString, '%d');
+WHILE pos > 0 DO
+    IF pos > 0 THEN
+        tempString := COPY(resultString, 1, pos - 1);
+        resultString := CONCAT(tempString, INT_TO_STRING(param2));
+        resultString := CONCAT(resultString, COPY(resultString, pos + 2, LEN(resultString)));
+        pos := FIND(resultString, '%d', pos + LEN(INT_TO_STRING(param2)));
+    END_IF;
+END_WHILE;

@@ -1,0 +1,37 @@
+```st
+VAR_INPUT
+    X : INT;
+    T : TIME;
+END_VAR
+
+VAR_OUTPUT
+    Y : INT;
+END_VAR
+
+VAR
+    Yi : DINT;
+    last : UDINT;
+    tx : UDINT;
+    init : BOOL;
+    T_PLC_MS : T_PLC_MS;
+END_VAR
+
+(*@KEY@: WORKSHEET
+NAME: FILTER_I
+IEC_LANGUAGE: ST
+*)
+(* read system time *)
+T_PLC_MS();
+tx := T_PLC_MS.T_PLC_MS;
+
+(* startup initialisation *)
+IF NOT init OR T = t#0s THEN
+    init := TRUE;
+    Yi := INT_TO_DINT(X) * DINT#1000;
+ELSE
+    (* to increase accuracy of the filter we calculate internal Yi which is Y * 1000 *)
+    Yi := Yi + INT_TO_DINT(X - Y) * UDINT_TO_DINT(tx - last) * DINT#1000 / TIME_TO_DINT(T);
+END_IF;
+last := tx;
+Y := DINT_TO_INT(Yi / DINT#1000);
+```

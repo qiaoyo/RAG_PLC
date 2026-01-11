@@ -1,0 +1,27 @@
+```st
+VAR_INPUT
+    STR : STRING;
+END_VAR
+
+VAR_OUTPUT
+    IS_CTRL : BOOL;
+END_VAR
+
+VAR
+    pos : INT;
+    I : INT;
+END_VAR
+
+(*@KEY@: WORKSHEET
+NAME: IS_CTRL
+IEC_LANGUAGE: ST
+*)
+I := LEN(STR);
+FOR pos := 1 TO I DO
+    IF NOT ISC_CTRL(INT_TO_BYTE(GET_CHAR(STR, pos))) THEN
+        IS_CTRL := FALSE;
+        RETURN;
+    END_IF;
+END_FOR;
+IS_CTRL := I > 0;
+```

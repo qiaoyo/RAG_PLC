@@ -1,0 +1,30 @@
+{
+  "score": 0.31894273127753303,
+  "components": {
+    "compile": 0.0,
+    "static": 0.0,
+    "runtime": 0.0,
+    "logic": 0.7973568281938326
+  },
+  "details": [
+    {
+      "stage": "compile",
+      "iec2c_stdout": "",
+      "iec2c_stderr": "wrapped.st:8: error: invalid specification in variable declaration.\nwrapped.st:13: error: invalid specification in variable declaration.\nwrapped.st:19: error: invalid specification in variable declaration.\nSegmentation fault (core dumped)\n",
+      "status": "iec2c_failed"
+    },
+    {
+      "stage": "static",
+      "status": "no_c_files"
+    },
+    {
+      "stage": "runtime",
+      "status": "no_binary"
+    },
+    {
+      "stage": "logic",
+      "status": "similarity",
+      "ratio": 0.7973568281938326
+    }
+  ]
+}

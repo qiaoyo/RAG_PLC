@@ -1,0 +1,30 @@
+{
+  "score": 0.3895247332686712,
+  "components": {
+    "compile": 0.0,
+    "static": 0.0,
+    "runtime": 0.0,
+    "logic": 0.973811833171678
+  },
+  "details": [
+    {
+      "stage": "compile",
+      "iec2c_stdout": "",
+      "iec2c_stderr": "wrapped.st:28: error: invalid specification in variable declaration.\nwrapped.st:29: error: invalid specification in variable declaration.\nwrapped.st:33: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:33: error: ';' missing at the end of statement in ST statement.\nwrapped.st:33: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:33: error: ';' missing at the end of statement in ST statement.\nwrapped.st:33: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:33: error: ';' missing at the end of statement in ST statement.\nwrapped.st:33: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:33: error: ';' missing at the end of statement in ST statement.\nwrapped.st:33: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:33: error: ';' missing at the end of statement in ST statement.\nwrapped.st:33: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:33: error: ';' missing at the end of statement in ST statement.\nwrapped.st:33: error: invalid statement in ST statement.\nwrapped.st:34: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:34: error: ';' missing at the end of statement in ST statement.\nwrapped.st:34: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:34: error: ';' missing at the end of statement in ST statement.\nwrapped.st:34: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:34: error: ';' missing at the end of statement in ST statement.\nwrapped.st:34: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:34: error: ';' missing at the end of statement in ST statement.\nwrapped.st:34: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:34: error: ';' missing at the end of statement in ST statement.\nwrapped.st:34: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:34: error: ';' missing at the end of statement in ST statement.\nwrapped.st:34: error: invalid statement in ST statement.\n\n28 error(s) found. Bailing out!\n",
+      "status": "iec2c_failed"
+    },
+    {
+      "stage": "static",
+      "status": "no_c_files"
+    },
+    {
+      "stage": "runtime",
+      "status": "no_binary"
+    },
+    {
+      "stage": "logic",
+      "status": "similarity",
+      "ratio": 0.973811833171678
+    }
+  ]
+}

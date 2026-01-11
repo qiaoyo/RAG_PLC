@@ -1,0 +1,30 @@
+{
+  "score": 0.3593513513513514,
+  "components": {
+    "compile": 0.0,
+    "static": 0.0,
+    "runtime": 0.0,
+    "logic": 0.8983783783783784
+  },
+  "details": [
+    {
+      "stage": "compile",
+      "iec2c_stdout": "",
+      "iec2c_stderr": "wrapped.st:8: error: invalid variable(s) declaration.\nwrapped.st:8: error: unexpected token after 'VAR_IN_OUT' in in_out variable(s) declaration.\nwrapped.st:18: error: invalid specification in variable declaration.\nwrapped.st:26: error: invalid specification in variable declaration.\nwrapped.st:45: error: invalid statement in ST statement.\nSegmentation fault (core dumped)\n",
+      "status": "iec2c_failed"
+    },
+    {
+      "stage": "static",
+      "status": "no_c_files"
+    },
+    {
+      "stage": "runtime",
+      "status": "no_binary"
+    },
+    {
+      "stage": "logic",
+      "status": "similarity",
+      "ratio": 0.8983783783783784
+    }
+  ]
+}

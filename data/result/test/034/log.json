@@ -1,0 +1,30 @@
+{
+  "score": 0.2627450980392157,
+  "components": {
+    "compile": 0.0,
+    "static": 0.0,
+    "runtime": 0.0,
+    "logic": 0.6568627450980392
+  },
+  "details": [
+    {
+      "stage": "compile",
+      "iec2c_stdout": "",
+      "iec2c_stderr": "wrapped.st:28: error: invalid variable before ':=' in ST assignment statement.\n\n1 error(s) found. Bailing out!\n",
+      "status": "iec2c_failed"
+    },
+    {
+      "stage": "static",
+      "status": "no_c_files"
+    },
+    {
+      "stage": "runtime",
+      "status": "no_binary"
+    },
+    {
+      "stage": "logic",
+      "status": "similarity",
+      "ratio": 0.6568627450980392
+    }
+  ]
+}

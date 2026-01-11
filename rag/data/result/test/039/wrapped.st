@@ -1,0 +1,30 @@
+VAR_INPUT
+    SEP : BYTE;
+END_VAR
+
+VAR_IN_OUT
+    LIST : oscat_STRING250;
+END_VAR
+
+VAR_OUTPUT
+    LIST_RETRIEVE_LAST : oscat_STRING250;
+END_VAR
+
+VAR
+    i : INT;
+    size : INT;
+END_VAR
+
+size := LEN(LIST);
+i := size;
+WHILE i > 0 DO
+    IF INT_TO_BYTE(GET_CHAR(LIST, i)) = SEP THEN
+        LIST_RETRIEVE_LAST := RIGHT(LIST, size - i);
+        LIST := LEFT(LIST, i - 1);
+        RETURN;
+    ELSE
+        i := i - 1;
+    END_IF;
+END_WHILE;
+LIST_RETRIEVE_LAST := '';
+LIST := '';

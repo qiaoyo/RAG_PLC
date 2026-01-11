@@ -1,0 +1,11 @@
+```st
+VAR_INPUT
+    ITOD : UDINT;
+END_VAR
+
+VAR_OUTPUT
+    minute : INT;
+END_VAR
+
+minute := UDINT_TO_INT((ITOD / UDINT#60000) - ((ITOD / UDINT#3600000) * UDINT#60));
+```

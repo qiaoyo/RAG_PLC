@@ -1,0 +1,27 @@
+VAR_INPUT
+	SET : BOOL;
+	IN : BOOL;
+	RST : BOOL;
+	TOGGLE_MODE : BOOL;
+	TIMEOUT : TIME;
+END_VAR
+
+VAR_OUTPUT
+	Q : BOOL;
+END_VAR
+
+VAR
+	off : TON;
+	edge : BOOL;
+END_VAR
+
+IF off.Q THEN Q := FALSE; END_IF;
+IF rst THEN
+	Q := FALSE;
+ELSIF set THEN
+	Q := TRUE;
+ELSIF IN AND NOT edge THEN
+		IF toggle_mode THEN Q := NOT Q; ELSE Q := TRUE; END_IF;
+END_IF;
+edge := IN;
+IF timeout > T#0s THEN off(IN := Q, PT := Timeout); END_IF;

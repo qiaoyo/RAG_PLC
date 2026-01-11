@@ -1,0 +1,18 @@
+VAR_INPUT
+    MS : REAL;
+    KMH : REAL;
+    KN : REAL;
+    MH : REAL;
+END_VAR
+
+VAR_OUTPUT
+    YMS : REAL;
+    YKMH : REAL;
+    YKN : REAL;
+    YMH : REAL;
+END_VAR
+
+YMS := MS;
+YKMH := KMH * 0.27777777777778;
+YKN := KN * 0.5144444;
+YMH := MH * 0.44704;

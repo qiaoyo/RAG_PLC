@@ -1,0 +1,18 @@
+VAR_INPUT
+    SIZE : UINT;
+END_VAR
+
+VAR_OUTPUT
+    BUFFER_CLEAR : BOOL;
+END_VAR
+
+VAR_IN_OUT
+    PT : ARRAY[0..255] OF BYTE; (* 假设数组最大长度为256 *)
+END_VAR
+
+VAR
+    err : INT;
+END_VAR
+
+err := MEMSET(PT, BYTE#00, UINT_TO_DINT(SIZE));
+BUFFER_CLEAR := (err = 0);

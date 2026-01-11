@@ -1,0 +1,57 @@
+```iec
+PROGRAM Main
+VAR
+    StartChk : BOOL;
+    Regen : BOOL;
+    ErrorFlag : BOOL;
+END_VAR
+
+// Step 1: Start Check
+IF NOT StartChk THEN
+    StartChk := TRUE;
+    // Additional initialization code here
+END_IF;
+
+// Step 2: Regeneration Check
+IF StartChk AND NOT Regen THEN
+    Regen := TRUE;
+    // Additional regeneration code here
+END_IF;
+
+// Error Handling
+IF ErrorFlag THEN
+    // Stop program
+    // Issue error message to visualization system
+    // Additional error handling code here
+END_IF;
+
+END_PROGRAM
+``` ```iec
+PROGRAM Main
+VAR
+    StartChk : BOOL := FALSE;
+    Regen : BOOL := FALSE;
+    ErrorFlag : BOOL := FALSE;
+END_VAR
+
+// Step 1: Start Check
+IF NOT StartChk THEN
+    StartChk := TRUE;
+    // Additional initialization code here
+END_IF;
+
+// Step 2: Regeneration Check
+IF StartChk AND NOT Regen THEN
+    Regen := TRUE;
+    // Additional regeneration code here
+END_IF;
+
+// Error Handling
+IF ErrorFlag THEN
+    // Stop program
+    // Issue error message to visualization system
+    // Additional error handling code here
+END_IF;
+
+END_PROGRAM
+```

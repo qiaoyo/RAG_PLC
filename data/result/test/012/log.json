@@ -1,0 +1,30 @@
+{
+  "score": 0.2731707317073171,
+  "components": {
+    "compile": 0.0,
+    "static": 0.0,
+    "runtime": 0.0,
+    "logic": 0.6829268292682927
+  },
+  "details": [
+    {
+      "stage": "compile",
+      "iec2c_stdout": "",
+      "iec2c_stderr": "wrapped.st:15: error: ';' missing at the end of statement in ST statement.\nwrapped.st:15: error: invalid statement in ST statement.\n\n2 error(s) found. Bailing out!\n",
+      "status": "iec2c_failed"
+    },
+    {
+      "stage": "static",
+      "status": "no_c_files"
+    },
+    {
+      "stage": "runtime",
+      "status": "no_binary"
+    },
+    {
+      "stage": "logic",
+      "status": "similarity",
+      "ratio": 0.6829268292682927
+    }
+  ]
+}

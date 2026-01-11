@@ -1,0 +1,19 @@
+VAR_INPUT
+	A : oscat_vector_3;
+END_VAR
+
+VAR_OUTPUT
+	V3_ZANG : REAL;
+END_VAR
+
+VAR
+	la : REAL;
+END_VAR
+
+la := SQRT(A.X * A.X + A.Y * A.Y + A.Z * A.Z);
+
+IF la > 0.0 THEN
+	V3_ZANG := ACOS(A.Z / la);
+ELSE
+	V3_ZANG := 0.0;
+END_IF;

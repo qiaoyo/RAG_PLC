@@ -1,0 +1,30 @@
+{
+  "score": 0.02038587550054605,
+  "components": {
+    "compile": 0.0,
+    "static": 0.0,
+    "runtime": 0.0,
+    "logic": 0.050964688751365124
+  },
+  "details": [
+    {
+      "stage": "compile",
+      "iec2c_stdout": "",
+      "iec2c_stderr": "wrapped.st:21: error: ';' missing at the end of statement in ST statement.\nwrapped.st:21: error: invalid statement in ST statement.\nwrapped.st:23: error: ')' missing at the end of function invocation in ST expression.\nwrapped.st:23: error: ';' missing at the end of statement in ST statement.\nwrapped.st:23: error: invalid statement in ST statement.\nwrapped.st:31: error: ';' missing at the end of statement in ST statement.\nwrapped.st:31: error: invalid statement in ST statement.\nwrapped.st:33: error: ')' missing at the end of function invocation in ST expression.\nwrapped.st:33: error: ';' missing at the end of statement in ST statement.\nwrapped.st:33: error: invalid statement in ST statement.\n\n10 error(s) found. Bailing out!\n",
+      "status": "iec2c_failed"
+    },
+    {
+      "stage": "static",
+      "status": "no_c_files"
+    },
+    {
+      "stage": "runtime",
+      "status": "no_binary"
+    },
+    {
+      "stage": "logic",
+      "status": "similarity",
+      "ratio": 0.050964688751365124
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+```iec
+MODULE Module1
+	PERS num a{5}:=[0,260,945,1025,220];
+	PERS num d{5}:=[742.5,0,0,0,251.5];
+	PERS num alpha{5}:=[0,-90,0,0,-90];
+	PERS num theta{5}:=[0,-90,90,0,180];
+	PERS jointtarget jt:=[[-53.625,45,15.875,0,0,-112.5],[9E+9,9E+9,9E+9,9E+9,9E+9,9E+9]];
+	PERS num cjoint{4}:=[-53.625,45,15.875,-112.5];
+	PERS pose rbPose:=[[1265.68,-1718.29,878.838],[1.17078E-8,0.491474,-0.870892,-1.75219E-8]];
+	PROC main()
+		jt:=CJointT();
+		cjoint{1}:=jt.robax.rax_1;
+		cjoint{2}:=jt.robax.rax_2;
+		cjoint{3}:=jt.robax.rax_3;
+		cjoint{4}:=jt.robax.rax_6;
+		rbPose:=cal4axisPalletRobot(cjoint);
+	ENDPROC
+	func pose cal4axisPalletRobot(num joints{*})
+		! input: 4 axis joint data
+		VAR num j{5};
+		VAR pose pose1:=[[0,0,0],[1,0,0,0]];
+		j{1}:=joints{1};
+		j{2}:=joints{2};
+		j{3}:=joints{3};
+		! j{4}:=joints{4};
+		j{5}:=joints{4};
+		FOR i FROM 1 TO 5 DO
+			IF i=2 THEN
+				j{3}:=j{3}-j{2};
+			ENDIF

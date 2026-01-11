@@ -1,0 +1,9 @@
+VAR_INPUT
+    X : oscat_complex;
+END_VAR
+
+VAR_OUTPUT
+    CABS : REAL;
+END_VAR
+
+CABS := HYPOT(X.re, X.im);

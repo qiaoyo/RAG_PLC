@@ -1,0 +1,9 @@
+VAR_INPUT
+    IN : WORD;
+END_VAR
+
+VAR_OUTPUT
+    Swap_Byte : WORD;
+END_VAR
+
+Swap_Byte := ROL_WORD(IN, 8);

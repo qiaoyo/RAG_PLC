@@ -1,0 +1,53 @@
+```st
+VAR_INPUT
+    UP : BOOL;
+    DN : BOOL;
+    S_IN : BYTE;
+    PI : BYTE;
+    ENABLE : BOOL;
+    SUN : BOOL;
+    HORZ1 : REAL := 100.0;
+    HORZ2 : REAL := 260.0;
+    VERT : REAL := 90.0;
+    ALERT : BOOL;
+    SUNRISE_OFFSET : TIME := T#1h;
+    SUNSET_PRESET : TIME := T#1h;
+    SHADE_DELAY : TIME := T#60s;
+    SHADE_POS : BYTE;
+    QU : BOOL;
+    QD : BOOL;
+    STATUS : BYTE;
+    PO : BYTE;
+END_VAR
+
+VAR_IN_OUT
+    CX : oscat_CALENDAR;
+END_VAR
+
+VAR
+    sun_delay : TOF;
+END_VAR
+
+(* 输入的太阳信号通过延时器(TOF)进行延迟，延迟时间为shade_delay *)
+sun_delay(IN := sun, PT := shade_delay);
+
+IF ALERT THEN
+    QU := TRUE;
+    QD := FALSE;
+    STATUS := BYTE#152;
+ELSIF UP AND DN AND ENABLE AND sun_delay.Q
+    AND (CX.SUN_HOR > HORZ1) AND (CX.SUN_HOR < HORZ2)
+    AND (CX.SUN_VER < VERT)
+    AND (DT_TO_TOD(CX.UTC) > CX.SUN_RISE + sunrise_offset) AND (DT_TO_TOD(CX.UTC) < CX.SUN_SET - sunset_preset) THEN
+    QU := UP;
+    QD := DN;
+    STATUS := BYTE#151;
+    (* 计算遮阳位置，位置必须小于或等于shade_pos *)
+    PO := MIN(PI, shade_pos);
+ELSE
+    QU := UP;
+    QD := DN;
+    PO := PI;
+    STATUS := S_IN;
+END_IF;
+```

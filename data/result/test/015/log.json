@@ -1,0 +1,30 @@
+{
+  "score": 0.30150314293522823,
+  "components": {
+    "compile": 0.0,
+    "static": 0.0,
+    "runtime": 0.0,
+    "logic": 0.7537578573380705
+  },
+  "details": [
+    {
+      "stage": "compile",
+      "iec2c_stdout": "",
+      "iec2c_stderr": "wrapped.st:32: error: invalid variable(s) declaration.\nwrapped.st:41: error: invalid specification in variable declaration.\nwrapped.st:45: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:57: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:67: error: invalid statement list in 'ELSEIF' statement of ST 'IF' statement.\nwrapped.st:63: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:82: error: invalid expression after 'AND' in ST expression.\nwrapped.st:82: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:90: error: invalid statement list in 'ELSEIF' statement of ST 'IF' statement.\nwrapped.st:85: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:82: error: expecting 'THEN' after test expression in ST 'IF' statement.\nwrapped.st:93: error: invalid statement in ST statement.\nwrapped.st:94: error: invalid expression after 'AND' in ST expression.\nwrapped.st:94: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:108: error: ';' missing at the end of statement in ST statement.\nwrapped.st:108: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:108: error: ';' missing at the end of statement in ST statement.\nwrapped.st:108: error: invalid statement in ST statement.\nwrapped.st:109: error: invalid statement in ST statement.\n\nParsing failed because of too many consecutive syntax errors. Bailing out!\n",
+      "status": "iec2c_failed"
+    },
+    {
+      "stage": "static",
+      "status": "no_c_files"
+    },
+    {
+      "stage": "runtime",
+      "status": "no_binary"
+    },
+    {
+      "stage": "logic",
+      "status": "similarity",
+      "ratio": 0.7537578573380705
+    }
+  ]
+}

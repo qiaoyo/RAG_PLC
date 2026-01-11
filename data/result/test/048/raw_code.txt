@@ -1,0 +1,17 @@
+```st
+VAR_INPUT
+    X : REAL;
+END_VAR
+
+VAR_OUTPUT
+    sgn : INT;
+END_VAR
+
+IF X > 0.0 THEN
+    sgn := 1;
+ELSIF X < 0.0 THEN
+    sgn := -1;
+ELSE
+    sgn := 0;
+END_IF;
+```

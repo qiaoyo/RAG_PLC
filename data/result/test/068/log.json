@@ -1,0 +1,32 @@
+{
+  "score": 0.4813455657492355,
+  "components": {
+    "compile": 0.0,
+    "static": 1.0,
+    "runtime": 0.0,
+    "logic": 0.7033639143730887
+  },
+  "details": [
+    {
+      "stage": "compile",
+      "iec2c_stdout": "POUS.c\nPOUS.h\nLOCATED_VARIABLES.h\nVARIABLES.csv\nConfig0.c\nConfig0.h\nRes0.c\n",
+      "iec2c_stderr": "",
+      "gcc_stderr": "POUS.c:1:28: error: unknown type name ‘LLM_WRAPPER_FB’\n    1 | void LLM_WRAPPER_FB_init__(LLM_WRAPPER_FB *data__, BOOL retain) {\n      |                            ^~~~~~~~~~~~~~\nPOUS.c:1:52: error: unknown type name ‘BOOL’\n    1 | void LLM_WRAPPER_FB_init__(LLM_WRAPPER_FB *data__, BOOL retain) {\n      |                                                    ^~~~\nPOUS.c:9:28: error: unknown type name ‘LLM_WRAPPER_FB’\n    9 | void LLM_WRAPPER_FB_body__(LLM_WRAPPER_FB *data__) {\n      |                            ^~~~~~~~~~~~~~\nPOUS.c:35:28: error: unknown type name ‘AUTO_PROXY_PRG’\n   35 | void AUTO_PROXY_PRG_init__(AUTO_PROXY_PRG *data__, BOOL retain) {\n      |                            ^~~~~~~~~~~~~~\nPOUS.c:35:52: error: unknown type name ‘BOOL’\n   35 | void AUTO_PROXY_PRG_init__(AUTO_PROXY_PRG *data__, BOOL retain) {\n      |                                                    ^~~~\nPOUS.c:40:28: error: unknown type name ‘AUTO_PROXY_PRG’\n   40 | void AUTO_PROXY_PRG_body__(AUTO_PROXY_PRG *data__) {\n      |                            ^~~~~~~~~~~~~~\n",
+      "status": "gcc_failed"
+    },
+    {
+      "stage": "static",
+      "status": "ok",
+      "avg_complexity": 1.4
+    },
+    {
+      "stage": "runtime",
+      "status": "no_binary"
+    },
+    {
+      "stage": "logic",
+      "status": "similarity",
+      "ratio": 0.7033639143730887
+    }
+  ]
+}

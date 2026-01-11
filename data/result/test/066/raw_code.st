@@ -1,0 +1,21 @@
+VAR_INPUT
+	A : oscat_vector_3;
+END_VAR
+
+VAR_OUTPUT
+	V3_XANG : REAL;
+END_VAR
+
+VAR
+	la : REAL;
+	V3_ABS : V3_ABS;
+END_VAR
+
+V3_ABS(A:=A);
+la := V3_ABS.V3_ABS;
+
+IF la > 0.0 THEN
+	V3_XANG := ACOS(A.X / la);
+ELSE
+	V3_XANG := 0.0;
+END_IF;

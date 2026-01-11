@@ -1,0 +1,24 @@
+VAR_INPUT
+    UTC : UDINT;
+    DST_ENABLE : BOOL;
+    TIME_ZONE_OFFSET : INT;
+END_VAR
+
+VAR_OUTPUT
+    LOCAL_TIME : UDINT;
+END_VAR
+
+VAR
+    tmp : INT;
+END_VAR
+
+tmp := TIME_ZONE_OFFSET * 60;
+IF DST_ENABLE THEN
+    tmp := tmp + 3600;
+END_IF;
+
+IF tmp < 0 THEN
+    LOCAL_TIME := UTC - _INT_TO_UDINT(ABS(tmp));
+ELSE
+    LOCAL_TIME := UTC + _INT_TO_UDINT(tmp);
+END_IF;

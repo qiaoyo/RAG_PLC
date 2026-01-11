@@ -1,0 +1,23 @@
+```st
+VAR_INPUT
+    IDATE : UDINT; // 输入的时间戳
+END_VAR
+
+VAR_OUTPUT
+    IS_LEAP_DAY : BOOL; // 输出是否是闰年的2月29日
+END_VAR
+
+VAR
+    YEAR : INT;
+    DAY_OF_YEAR : INT;
+END_VAR
+
+// 计算年份
+YEAR := INT((IDATE / UDINT#31557600) + 1970);
+
+// 计算一年中的第几天
+DAY_OF_YEAR := INT((IDATE MOD UDINT#31557600) / UDINT#86400) + 1;
+
+// 判断是否是闰年
+IS_LEAP_DAY := (DAY_OF_YEAR = 60) AND ((YEAR MOD 4 = 0) AND (YEAR MOD 100 <> 0) OR (YEAR MOD 400 = 0));
+```

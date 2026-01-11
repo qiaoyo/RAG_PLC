@@ -1,0 +1,44 @@
+```st
+VAR_INPUT
+	IN : BOOL;
+	T1 : TIME;
+	T2 : TIME;
+	RST : BOOL;
+END_VAR
+
+VAR_OUTPUT
+	Q : BOOL;
+END_VAR
+
+VAR
+	init : BOOL;
+	last : TIME;
+	tx : TIME;
+	edge : BOOL;
+	T_PLC_MS : T_PLC_MS;
+END_VAR
+
+(* 读取系统时间 *)
+T_PLC_MS();
+tx := UDINT_TO_TIME(T_PLC_MS.T_PLC_MS);
+
+IF NOT init THEN
+	init := TRUE;
+	last := tx;
+ELSIF RST THEN
+	(* 异步复位 *)
+	Q := FALSE;
+ELSIF IN AND NOT edge AND NOT Q THEN
+	(* 输入的上升沿将反转输出状态，如果新脉冲启动，开始时间存储在last中 *)
+	last := tx;
+	Q := TRUE;
+ELSIF NOT IN AND edge AND ((tx - last) > T1) THEN
+	(* 输入的下降沿将清除输出，如果输入高电平超过T1 *)
+	Q := FALSE;
+ELSIF (tx - last) >= T2 THEN
+	(* 长脉冲超时，如果第二次点击没有发生或输入保持高电平 *)
+	Q := FALSE;
+END_IF;
+
+edge := IN;
+```

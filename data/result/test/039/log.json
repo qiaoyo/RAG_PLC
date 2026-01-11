@@ -1,0 +1,30 @@
+{
+  "score": 0.37158469945355194,
+  "components": {
+    "compile": 0.0,
+    "static": 0.0,
+    "runtime": 0.0,
+    "logic": 0.9289617486338798
+  },
+  "details": [
+    {
+      "stage": "compile",
+      "iec2c_stdout": "",
+      "iec2c_stderr": "wrapped.st:12: error: invalid variable(s) declaration.\nwrapped.st:12: error: unexpected token after 'VAR_IN_OUT' in in_out variable(s) declaration.\nwrapped.st:16: error: invalid specification in variable declaration.\nwrapped.st:27: error: ')' missing at the end of function invocation in ST expression.\nwrapped.st:27: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:27: error: expecting 'THEN' after test expression in ST 'IF' statement.\nSegmentation fault (core dumped)\n",
+      "status": "iec2c_failed"
+    },
+    {
+      "stage": "static",
+      "status": "no_c_files"
+    },
+    {
+      "stage": "runtime",
+      "status": "no_binary"
+    },
+    {
+      "stage": "logic",
+      "status": "similarity",
+      "ratio": 0.9289617486338798
+    }
+  ]
+}

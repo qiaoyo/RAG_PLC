@@ -1,0 +1,33 @@
+```st
+VAR_INPUT
+IN : REAL;
+HYST : REAL;
+VAL1 : REAL;
+VAL2 : REAL;
+END_VAR
+
+VAR_OUTPUT
+Q1 : BOOL;
+Q2 : BOOL;
+END_VAR
+
+VAR
+X : REAL;
+END_VAR
+
+(*@KEY@: WORKSHEET
+NAME: HYST_3
+IEC_LANGUAGE: ST
+*)
+X := hyst * 0.5;
+IF in < val1 - X THEN
+q1 := TRUE;
+ELSIF in > val1 + X THEN
+q1 := FALSE;
+END_IF;
+IF in < val2 - X THEN
+q2 := FALSE;
+ELSIF in > val2 + X THEN
+q2 := TRUE;
+END_IF;
+```

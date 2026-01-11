@@ -1,0 +1,30 @@
+{
+  "score": 0.3241675617615467,
+  "components": {
+    "compile": 0.0,
+    "static": 0.0,
+    "runtime": 0.0,
+    "logic": 0.8104189044038668
+  },
+  "details": [
+    {
+      "stage": "compile",
+      "iec2c_stdout": "",
+      "iec2c_stderr": "wrapped.st:77: error: invalid statement in ST statement.\nwrapped.st:82: error: invalid statement in ST statement.\nwrapped.st:85: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:89: error: ';' missing at the end of statement in ST statement.\nwrapped.st:89: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:89: error: ';' missing at the end of statement in ST statement.\nwrapped.st:89: error: invalid statement in ST statement.\nwrapped.st:90: error: invalid statement in ST statement.\n\nParsing failed because of too many consecutive syntax errors. Bailing out!\n",
+      "status": "iec2c_failed"
+    },
+    {
+      "stage": "static",
+      "status": "no_c_files"
+    },
+    {
+      "stage": "runtime",
+      "status": "no_binary"
+    },
+    {
+      "stage": "logic",
+      "status": "similarity",
+      "ratio": 0.8104189044038668
+    }
+  ]
+}

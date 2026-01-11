@@ -1,0 +1,30 @@
+{
+  "score": 0.3802914642609299,
+  "components": {
+    "compile": 0.0,
+    "static": 0.0,
+    "runtime": 0.0,
+    "logic": 0.9507286606523248
+  },
+  "details": [
+    {
+      "stage": "compile",
+      "iec2c_stdout": "",
+      "iec2c_stderr": "wrapped.st:31: error: invalid variable(s) declaration.\nwrapped.st:31: error: unexpected token after 'VAR_IN_OUT' in in_out variable(s) declaration.\nwrapped.st:38: error: invalid specification in variable declaration.\nwrapped.st:57: error: ';' missing at the end of statement in ST statement.\nwrapped.st:57: error: invalid statement in ST statement.\nwrapped.st:65: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:65: error: ';' missing at the end of statement in ST statement.\nwrapped.st:65: error: invalid statement in ST statement.\nwrapped.st:71: error: ';' missing at the end of statement in ST statement.\nwrapped.st:72: error: invalid statement in ST statement.\nwrapped.st:77: error: invalid statement in ST statement.\nwrapped.st:80: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:84: error: ';' missing at the end of statement in ST statement.\nwrapped.st:84: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:84: error: ';' missing at the end of statement in ST statement.\nwrapped.st:84: error: invalid statement in ST statement.\nwrapped.st:85: error: invalid statement in ST statement.\n\nParsing failed because of too many consecutive syntax errors. Bailing out!\n",
+      "status": "iec2c_failed"
+    },
+    {
+      "stage": "static",
+      "status": "no_c_files"
+    },
+    {
+      "stage": "runtime",
+      "status": "no_binary"
+    },
+    {
+      "stage": "logic",
+      "status": "similarity",
+      "ratio": 0.9507286606523248
+    }
+  ]
+}

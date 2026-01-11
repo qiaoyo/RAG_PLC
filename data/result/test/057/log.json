@@ -1,0 +1,30 @@
+{
+  "score": 0.16096969696969696,
+  "components": {
+    "compile": 0.0,
+    "static": 0.0,
+    "runtime": 0.0,
+    "logic": 0.4024242424242424
+  },
+  "details": [
+    {
+      "stage": "compile",
+      "iec2c_stdout": "",
+      "iec2c_stderr": "wrapped.st:8: error: invalid specification in variable declaration.\nwrapped.st:19: error: invalid specification in variable declaration.\nwrapped.st:35: error: invalid statement in ST statement.\nwrapped.st:38: error: ';' missing at the end of statement in ST statement.\nwrapped.st:38: error: invalid statement in ST statement.\nwrapped.st:45: error: invalid statement in ST statement.\nwrapped.st:48: error: ';' missing at the end of statement in ST statement.\nwrapped.st:48: error: invalid statement in ST statement.\nSegmentation fault (core dumped)\n",
+      "status": "iec2c_failed"
+    },
+    {
+      "stage": "static",
+      "status": "no_c_files"
+    },
+    {
+      "stage": "runtime",
+      "status": "no_binary"
+    },
+    {
+      "stage": "logic",
+      "status": "similarity",
+      "ratio": 0.4024242424242424
+    }
+  ]
+}

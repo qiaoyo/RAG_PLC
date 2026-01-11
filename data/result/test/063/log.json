@@ -1,0 +1,30 @@
+{
+  "score": 0.20027510316368638,
+  "components": {
+    "compile": 0.0,
+    "static": 0.0,
+    "runtime": 0.0,
+    "logic": 0.5006877579092159
+  },
+  "details": [
+    {
+      "stage": "compile",
+      "iec2c_stdout": "",
+      "iec2c_stderr": "wrapped.st:14: error: unknown error in output variable(s) declaration.\nwrapped.st:21: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:23: error: ')' missing at the end of function invocation in ST expression.\nwrapped.st:23: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:27: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:23: error: expecting 'THEN' after test expression in ST 'IF' statement.\nSegmentation fault (core dumped)\n",
+      "status": "iec2c_failed"
+    },
+    {
+      "stage": "static",
+      "status": "no_c_files"
+    },
+    {
+      "stage": "runtime",
+      "status": "no_binary"
+    },
+    {
+      "stage": "logic",
+      "status": "similarity",
+      "ratio": 0.5006877579092159
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 import importlib
 import logging
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig, pipeline
@@ -36,7 +36,10 @@ class LLMGenerator:
         if self.use_vllm:
             from vllm import LLM, SamplingParams
 
-            vllm_dtype = dtype.name if isinstance(dtype, torch.dtype) else dtype
+            if isinstance(dtype, torch.dtype):
+                vllm_dtype = getattr(dtype, "name", str(dtype).replace("torch.", ""))
+            else:
+                vllm_dtype = dtype
             self.sampling_params = SamplingParams()
             self.llm = LLM(
                 model=model_name_or_path,
@@ -83,26 +86,42 @@ class LLMGenerator:
 
     def generate(
         self,
-        prompt: str,
+        prompt: Union[str, List[str]],
         max_new_tokens: int = 512,
         temperature: float = 0.2,
         top_p: float = 0.9,
-    ) -> str:
+    ) -> Union[str, List[str]]:
+        prompts: List[str] = [prompt] if isinstance(prompt, str) else prompt
+
         if self.use_vllm:
             from vllm import SamplingParams
 
             params = SamplingParams(
                 temperature=temperature, top_p=top_p, max_tokens=max_new_tokens, stop=[]
             )
-            outputs = self.llm.generate([prompt], sampling_params=params)
-            return outputs[0].outputs[0].text.strip()
-        response = self.generator(
-            prompt,
-            max_new_tokens=max_new_tokens,
-            do_sample=temperature > 0,
-            temperature=temperature,
-            top_p=top_p,
-            eos_token_id=self.tokenizer.eos_token_id,
-            pad_token_id=self.tokenizer.pad_token_id,
-        )[0]["generated_text"]
-        return response[len(prompt) :].strip() if response.startswith(prompt) else response.strip()
+            outputs = self.llm.generate(prompts, sampling_params=params)
+            texts = [out.outputs[0].text.strip() for out in outputs]
+        else:
+            responses = self.generator(
+                prompts,
+                max_new_tokens=max_new_tokens,
+                do_sample=temperature > 0,
+                temperature=temperature,
+                top_p=top_p,
+                eos_token_id=self.tokenizer.eos_token_id,
+                pad_token_id=self.tokenizer.pad_token_id,
+            )
+            texts = []
+            for prompt_text, resp in zip(prompts, responses):
+                # pipeline may return a list of dicts per item
+                if isinstance(resp, list):
+                    resp = resp[0]
+                generated = resp["generated_text"]
+                if isinstance(generated, list):
+                    generated = generated[0]
+                cleaned = generated[len(prompt_text) :].strip() if generated.startswith(prompt_text) else generated.strip()
+                texts.append(cleaned)
+
+        if isinstance(prompt, str):
+            return texts[0]
+        return texts

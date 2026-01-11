@@ -1,0 +1,22 @@
+VAR_OUTPUT
+	TC : DWORD;
+END_VAR
+
+VAR
+	init : BOOL;
+	tx : UDINT;
+	last : UDINT;
+	T_PLC_MS : T_PLC_MS;
+END_VAR
+
+(* 读取系统时间并准备输入数据 *)
+T_PLC_MS();
+tx := T_PLC_MS.T_PLC_MS;
+
+IF NOT init THEN
+	init := TRUE;
+	TC := DWORD#0;
+ELSE
+	tc := UDINT_TO_DWORD(tx - last);
+END_IF;
+last := tx;

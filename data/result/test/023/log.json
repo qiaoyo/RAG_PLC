@@ -1,0 +1,30 @@
+{
+  "score": 0.23543240973971452,
+  "components": {
+    "compile": 0.0,
+    "static": 0.0,
+    "runtime": 0.0,
+    "logic": 0.5885810243492863
+  },
+  "details": [
+    {
+      "stage": "compile",
+      "iec2c_stdout": "",
+      "iec2c_stderr": "wrapped.st:8: error: invalid specification in external variable declaration.\nwrapped.st:13: error: invalid specification in variable declaration.\nwrapped.st:18: error: ')' missing at the end of function invocation in ST expression.\nwrapped.st:18: error: ')' missing at the end of function invocation in ST expression.\nwrapped.st:18: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:26: error: ';' missing at the end of statement in ST statement.\nwrapped.st:26: error: invalid statement in ST statement.\nwrapped.st:27: error: ';' missing at the end of statement in ST statement.\nwrapped.st:27: error: invalid statement in ST statement.\nwrapped.st:28: error: invalid statement in ST statement.\nwrapped.st:29: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:30: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:33: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:35: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:36: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:37: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:37: error: ';' missing at the end of statement in ST statement.\nwrapped.st:37: error: invalid statement in ST statement.\nwrapped.st:33: error: expecting 'THEN' after test expression in ST 'IF' statement.\nwrapped.st:41: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:46: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:41: error: expecting 'THEN' after test expression in ST 'IF' statement.\nwrapped.st:50: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:50: error: ';' missing at the end of statement in ST statement.\nwrapped.st:50: error: invalid statement in ST statement.\nwrapped.st:51: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:51: error: ';' missing at the end of statement in ST statement.\nwrapped.st:51: error: invalid statement in ST statement.\nwrapped.st:52: error: ';' missing at the end of statement in ST statement.\nwrapped.st:52: error: invalid statement in ST statement.\nwrapped.st:53: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:53: error: ';' missing at the end of statement in ST statement.\nwrapped.st:53: error: invalid statement in ST statement.\nwrapped.st:54: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:54: error: ';' missing at the end of statement in ST statement.\nwrapped.st:54: error: invalid statement in ST statement.\nwrapped.st:55: error: invalid variable before ':=' in ST assignment statement.\nwrapped.st:18: error: expecting 'THEN' after test expression in ST 'IF' statement.\nwrapped.st:57: error: invalid statement in ST statement.\n\n36 error(s) found. Bailing out!\n",
+      "status": "iec2c_failed"
+    },
+    {
+      "stage": "static",
+      "status": "no_c_files"
+    },
+    {
+      "stage": "runtime",
+      "status": "no_binary"
+    },
+    {
+      "stage": "logic",
+      "status": "similarity",
+      "ratio": 0.5885810243492863
+    }
+  ]
+}

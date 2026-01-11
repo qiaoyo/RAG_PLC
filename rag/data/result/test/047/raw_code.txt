@@ -1,0 +1,35 @@
+```st
+VAR_INPUT
+	D0 : BOOL;
+	D1 : BOOL;
+	D2 : BOOL;
+	D3 : BOOL;
+	L : BOOL;
+	RST : BOOL;
+END_VAR
+
+VAR_OUTPUT
+	Q0 : BOOL;
+	Q1 : BOOL;
+	Q2 : BOOL;
+	Q3 : BOOL;
+END_VAR
+
+(*@KEY@: WORKSHEET
+NAME: LTCH_4
+IEC_LANGUAGE: ST
+*)
+(* 只要 L 为 true，锁存器是透明的，D 的变化会被传递到 Q *)
+(* 当然，前提是没有异步复位 *)
+IF rst THEN (* 如果是异步复位，则 Q = 0 *)
+	Q0 := FALSE;
+	Q1 := FALSE;
+	Q2 := FALSE;
+	Q3 := FALSE;
+ELSIF L THEN (* 锁存器是透明的 *)
+	Q0 := D0;
+	Q1 := D1;
+	Q2 := D2;
+	Q3 := D3;
+END_IF;
+```
