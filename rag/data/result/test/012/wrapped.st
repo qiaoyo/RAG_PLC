@@ -1,9 +1,0 @@
-VAR_INPUT
-    IN : WORD;
-END_VAR
-
-VAR_OUTPUT
-    Swap_Byte : WORD;
-END_VAR
-
-Swap_Byte := (IN AND 0xFF00) SHR 8 OR (IN AND 0x00FF) SHL 8;

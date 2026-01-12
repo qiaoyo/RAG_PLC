@@ -31,8 +31,10 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 SYSTEM_PROMPT = (
     "你是工业控制与PLC编程专家，擅长IEC 61131-3 标准的 ST 语言。"
     "请基于提供的上下文生成可直接使用的PLC代码，保证变量声明完整、逻辑自洽。"
+    "避免非IEC标准写法，禁止输出Markdown代码块和 // 注释；如无必要，请不要输出任何注释。"
     "如果上下文不足，请给出最佳实践的安全实现。"
 )
+
 
 
 class RAGPipeline:
@@ -50,7 +52,7 @@ class RAGPipeline:
             f"检索到的材料:\n{context_block}\n\n"
             f"用户指令: {instruction}\n"
             f"补充输入: {user_input or '无'}\n"
-            "请输出符合要求的PLC代码，仅给出代码本身。"
+            "请输出符合要求的PLC代码，仅给出代码本身，不允许使用Markdown，不允许使用 // 注释。"
         )
 
     def generate(self, instruction: str, user_input: str = "", top_k: int | None = None) -> Dict:
